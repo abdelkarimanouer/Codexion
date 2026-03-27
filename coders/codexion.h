@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/03/27 15:59:53 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/03/27 16:11:46 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 
 typedef struct s_codexion
 {
-	int	number_of_coders;
-	int	time_to_burnout;
-	int	time_to_compile;
-	int	time_to_debug;
-	int	time_to_refactor;
-	int	number_of_compiles_required;
-	int	dongle_cooldown;
-	int	scheduler;
-	int	stop_simulation;
+	long	number_of_coders;
+	long	time_to_burnout;
+	long	time_to_compile;
+	long	time_to_debug;
+	long	time_to_refactor;
+	long	number_of_compiles_required;
+	long	dongle_cooldown;
+	char	*scheduler;
+	int		stop_simulation;
 }	t_codexion;
 
 #endif
