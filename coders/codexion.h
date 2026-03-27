@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/03/27 15:53:46 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/03/27 15:59:53 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_codexion
 	int	number_of_compiles_required;
 	int	dongle_cooldown;
 	int	scheduler;
+	int	stop_simulation;
 }	t_codexion;
 
 #endif
