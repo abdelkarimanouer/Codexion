@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/03/30 17:28:46 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/03/31 10:36:43 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,17 @@
 
 int	main(int argc, char **argv)
 {
-	if (argc == 9)
+	t_simulation	*sim;
+	t_dongle		*dongle;
+	t_coder			*coder;
+
+	if (argc != 9)
 	{
+		write(2, "Invalid Args\n", 13);
+		return (1);
 	}
-	else
+	sim = malloc(sizeof(t_simulation));
+	if (!parsing_args(sim, argv))
 	{
 		write(2, "Invalid Args\n", 13);
 		return (1);
