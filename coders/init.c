@@ -6,21 +6,20 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 09:14:25 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/04 13:27:36 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 14:35:27 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static void	initialize_dongles(t_simulation *sim, t_dongle *dongles)
+void	initialize_dongles(t_simulation *sim, t_dongle *dongles)
 {
 	int	i;
 
 	i = 0;
-	dongles = malloc(sizeof(t_dongle) * sim->number_of_coders);
 	while (i < sim->number_of_coders)
 	{
-		pthread_mutex_init(&dongles[i], NULL);
+		pthread_mutex_init(&dongles[i].mutex, NULL);
 		pthread_cond_init(&dongles[i].condition, NULL);
 		dongles[i].cooldown_until = 0;
 		dongles[i].is_available = 1;
@@ -28,7 +27,7 @@ static void	initialize_dongles(t_simulation *sim, t_dongle *dongles)
 	}
 }
 
-static void	initialize_mutexes(t_simulation *sim)
+void	initialize_mutexes(t_simulation *sim)
 {
 	struct timeval	tv;
 
@@ -39,12 +38,11 @@ static void	initialize_mutexes(t_simulation *sim)
 	sim->start_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
 }
 
-static void	initialize_coders(t_simulation *sim, t_coder *coders,
+void	initialize_coders(t_simulation *sim, t_coder *coders,
 	t_dongle *dongles)
 {
 	int	i;
 
-	coders = malloc(sizeof(t_coder) * sim->number_of_coders);
 	i = 0;
 	while (i < sim->number_of_coders)
 	{
