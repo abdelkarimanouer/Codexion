@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/04 15:51:15 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 15:57:20 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	start(t_simulation **sim, t_coder **coders,
 		free_clean_everything(sim, coders, dongles);
 		return (1);
 	}
-	return 0;
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -61,7 +61,8 @@ int	main(int argc, char **argv)
 
 	if (argc != 9)
 	{
-		fprintf(stderr, "[ERROR]: Number of Args should be Exactly 9 with program name!\n");
+		fprintf(stderr, "[ERROR]: Number of Args should be Exactly "
+			"9 with program name!\n");
 		return (1);
 	}
 	sim = malloc(sizeof(t_simulation));
