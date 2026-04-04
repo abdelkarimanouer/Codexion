@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/04 15:25:30 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 15:51:15 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,22 @@ void	free_clean_everything(t_simulation **sim, t_coder **coders,
 	free(*dongles);
 }
 
+int	start(t_simulation **sim, t_coder **coders,
+			t_dongle **dongles, char **argv)
+{
+	if (!parsing_args(*sim, argv))
+	{
+		free(*sim);
+		return (1);
+	}
+	if (!initialize(*sim, coders, dongles))
+	{
+		free_clean_everything(sim, coders, dongles);
+		return (1);
+	}
+	return 0;
+}
+
 int	main(int argc, char **argv)
 {
 	t_simulation	*sim;
@@ -45,20 +61,18 @@ int	main(int argc, char **argv)
 
 	if (argc != 9)
 	{
-		write(2, "Invalid Args\n", 13);
+		fprintf(stderr, "[ERROR]: Number of Args should be Exactly 9 with program name!\n");
 		return (1);
 	}
 	sim = malloc(sizeof(t_simulation));
 	if (!sim)
 	{
-		write(2, "Invalid Args\n", 13);
-		free(sim);
+		fprintf(stderr, "[ERROR]: Memory allocation failed");
 		return (1);
 	}
-	if (!parsing_args(sim, argv) || !initialize(sim, &coders, &dongles))
+	if (start(&sim, &coders, &dongles, argv))
 	{
-		write(2, "Invalid Args\n", 13);
-		free_clean_everything(&sim, &coders, &dongles);
+		fprintf(stderr, "[ERROR]: invalid Args or Memory allocation failed\n");
 		return (1);
 	}
 	free_clean_everything(&sim, &coders, &dongles);
