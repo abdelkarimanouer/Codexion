@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/04 16:18:04 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 16:52:23 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,22 +75,12 @@ int	main(int argc, char **argv)
 	t_coder			*coders;
 
 	if (argc != 9)
-	{
-		fprintf(stderr, "[ERROR]: Number of Args should be Exactly "
-			"9 with program name!\n");
-		return (1);
-	}
+		return (fprintf(stderr, "[ERROR]: Number of Args should be Exactly "
+				"9 with program name!\n"), 1);
 	sim = malloc(sizeof(t_simulation));
 	if (!sim)
-	{
-		fprintf(stderr, "[ERROR]: Memory allocation failed");
-		return (1);
-	}
+		return (fprintf(stderr, "[ERROR]: Memory allocation failed"), 1);
 	if (start(&sim, &coders, &dongles, argv))
-	{
-		fprintf(stderr, "[ERROR]: invalid Args or Memory allocation failed\n");
-		return (1);
-	}
-	free_clean_everything(&sim, &coders, &dongles);
-	return (0);
+		return (fprintf(stderr, "[ERROR]: bad_args | mem_alloc_fail\n"), 1);
+	return (free_clean_everything(&sim, &coders, &dongles), 0);
 }
