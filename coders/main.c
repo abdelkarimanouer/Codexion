@@ -6,13 +6,14 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/04 14:56:56 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 15:00:49 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	initialize(t_simulation *sim, t_coder **coders, t_dongle **dongles)
+static int	initialize(t_simulation *sim, t_coder **coders,
+			t_dongle **dongles)
 {
 	initialize_mutexes(sim);
 	*dongles = malloc(sizeof(t_dongle) * sim->number_of_coders);
