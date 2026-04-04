@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/04 15:14:39 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 15:25:30 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,14 @@ static int	initialize(t_simulation *sim, t_coder **coders,
 	sim->coders = *coders;
 	initialize_coders(sim, *coders, *dongles);
 	return (1);
+}
+
+void	free_clean_everything(t_simulation **sim, t_coder **coders,
+			t_dongle **dongles)
+{
+	free(*sim);
+	free(*coders);
+	free(*dongles);
 }
 
 int	main(int argc, char **argv)
@@ -50,9 +58,9 @@ int	main(int argc, char **argv)
 	if (!parsing_args(sim, argv) || !initialize(sim, &coders, &dongles))
 	{
 		write(2, "Invalid Args\n", 13);
-		free(dongles);
-		free(coders);
+		free_clean_everything(&sim, &coders, &dongles);
 		return (1);
 	}
+	free_clean_everything(&sim, &coders, &dongles);
 	return (0);
 }
