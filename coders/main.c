@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/04 16:05:27 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 16:18:04 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,19 @@ static int	initialize(t_simulation *sim, t_coder **coders,
 void	free_clean_everything(t_simulation **sim, t_coder **coders,
 			t_dongle **dongles)
 {
+	int	i;
+
+	if (!*sim)
+		return ;
+	i = 0;
+	while (i < (*sim)->number_of_coders && *dongles)
+	{
+		pthread_mutex_destroy(&(*dongles)[i].mutex);
+		pthread_cond_destroy(&(*dongles)[i].condition);
+		i += 1;
+	}
+	pthread_mutex_destroy(&(*sim)->print_mutex);
+	pthread_mutex_destroy(&(*sim)->stop_mutex);
 	free(*sim);
 	free(*coders);
 	free(*dongles);
