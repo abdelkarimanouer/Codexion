@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/04 15:57:20 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 16:05:27 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	free_clean_everything(t_simulation **sim, t_coder **coders,
 int	start(t_simulation **sim, t_coder **coders,
 			t_dongle **dongles, char **argv)
 {
+	*coders = NULL;
+	*dongles = NULL;
 	if (!parsing_args(*sim, argv))
 	{
 		free(*sim);
