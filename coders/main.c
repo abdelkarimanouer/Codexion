@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/04 15:00:49 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 15:14:39 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,14 @@ int	main(int argc, char **argv)
 	if (!sim)
 	{
 		write(2, "Invalid Args\n", 13);
+		free(sim);
 		return (1);
 	}
 	if (!parsing_args(sim, argv) || !initialize(sim, &coders, &dongles))
 	{
 		write(2, "Invalid Args\n", 13);
+		free(dongles);
+		free(coders);
 		return (1);
 	}
 	return (0);
