@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 09:14:25 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/04 14:35:27 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 14:42:26 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	initialize_dongles(t_simulation *sim, t_dongle *dongles)
 		pthread_cond_init(&dongles[i].condition, NULL);
 		dongles[i].cooldown_until = 0;
 		dongles[i].is_available = 1;
-		i += 1;
+		i++;
 	}
 }
 
@@ -46,13 +46,13 @@ void	initialize_coders(t_simulation *sim, t_coder *coders,
 	i = 0;
 	while (i < sim->number_of_coders)
 	{
-		pthread_mutex_init(&coders[i], NULL);
 		coders[i].id = i + 1;
 		coders[i].compile_count = 0;
 		coders[i].last_compile_time = sim->start_time;
 		coders[i].deadline = sim->start_time + sim->time_to_burnout;
 		coders[i].sim = sim;
 		coders[i].left_dongle = &dongles[i];
-		coders[i].right_dongle = &dongles[i + 1] % sim->number_of_coders;
+		coders[i].right_dongle =  &dongles[(i + 1) % sim->number_of_coders];
+		i++;
 	}
 }
