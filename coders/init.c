@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 09:14:25 by aanouer           #+#    #+#             */
-/*   Updated: 2026/03/31 09:14:52 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/04 13:27:36 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void	initialize_dongles(t_simulation *sim, t_dongle *dongles)
 {
 	int	i;
 
+	i = 0;
 	dongles = malloc(sizeof(t_dongle) * sim->number_of_coders);
 	while (i < sim->number_of_coders)
 	{
@@ -36,4 +37,24 @@ static void	initialize_mutexes(t_simulation *sim)
 	sim->stop_simulation = 0;
 	gettimeofday(&tv, NULL);
 	sim->start_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
+}
+
+static void	initialize_coders(t_simulation *sim, t_coder *coders,
+	t_dongle *dongles)
+{
+	int	i;
+
+	coders = malloc(sizeof(t_coder) * sim->number_of_coders);
+	i = 0;
+	while (i < sim->number_of_coders)
+	{
+		pthread_mutex_init(&coders[i], NULL);
+		coders[i].id = i + 1;
+		coders[i].compile_count = 0;
+		coders[i].last_compile_time = sim->start_time;
+		coders[i].deadline = sim->start_time + sim->time_to_burnout;
+		coders[i].sim = sim;
+		coders[i].left_dongle = &dongles[i];
+		coders[i].right_dongle = &dongles[i + 1] % sim->number_of_coders;
+	}
 }
