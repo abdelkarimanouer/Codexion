@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/05 11:00:14 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/05 12:34:28 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ void	initialize_mutexes(t_simulation *sim);
 void	initialize_coders(t_simulation *sim, t_coder *coders,
 			t_dongle *dongles);
 int		start_threads(t_simulation *sim);
+void	*coder_routine(void *arg);
 
 #endif
