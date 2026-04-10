@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 21:31:36 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/10 21:34:12 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_dongle
 	long long		cooldown_until;
 	int				is_available;
 	pthread_cond_t	condition;
-	t_coder			**waiting_queue;
+	struct s_coder	**waiting_queue;
 	int				waiting_count;
 	int				waiting_capacity;
 }	t_dongle;
