@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 12:03:16 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/10 20:41:46 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef struct s_simulation
 	long			dongle_cooldown;
 	char			*scheduler;
 	long long		start_time;
-	long long		time_since_compile;
+	long long		t_s_comp;
 	int				stop_simulation;
 	t_coder			*coders;
 	t_dongle		*dongles;
@@ -67,6 +67,7 @@ void	initialize_coders(t_simulation *sim, t_coder *coders,
 			t_dongle *dongles);
 int		start_threads(t_simulation *sim);
 void	*coder_routine(void *arg);
+void	*monitor_routine(void *arg);
 void	take_left_dongle(t_coder *coder);
 void	take_right_dongle(t_coder *coder);
 void	release_left_dongle(t_coder *coder);
