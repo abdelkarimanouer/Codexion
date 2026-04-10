@@ -6,28 +6,58 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 11:32:03 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 12:03:51 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/10 20:38:30 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
+static void	check_if_coders_compiled_enough(t_simulation *sim, int *i)
+{
+	*i = 0;
+	while (*i < sim->number_of_coders)
+	{
+		if (sim->coders[*i].compile_count < sim->number_of_compiles_required)
+			break;
+		*i++;
+	}
+	if (*i == sim->number_of_coders)
+		sim->stop_simulation = 1;
+}
+
+static long long get_time(t_simulation *sim)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((long long)tv.tv_sec * 1000000LL + tv.tv_usec);
+}
+
+
 void	*monitor_routine(void *arg)
 {
 	t_simulation	*sim;
 	int				i;
-	struct timeval	tv;
 	long long		current_time;
 
 	sim = (t_simulation *)arg;
-	i = 0;
 	while (sim->stop_simulation == 0)
 	{
+		i = 0;
 		while (i < sim->number_of_coders)
 		{
-			gettimeofday(&tv, NULL);
-			current_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
+			current_time = get_time(sim);
 			sim->time_since_compile = current_time - sim->coders[i].last_compile_time;
+			if (sim->time_since_compile > (sim->time_to_burnout * 1000))
+			{
+				log_action(sim, sim->coders[i].id, "burned out");
+				sim->stop_simulation = 1;
+				break;
+			}
+			i++;
 		}
+		check_if_coders_compiled_enough(sim, &i);
+		usleep(1000);
 	}
+	return (NULL);
 }
