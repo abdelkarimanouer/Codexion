@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 10:51:04 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/10 11:26:55 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ void	take_left_dongle(t_coder *coder);
 void	take_right_dongle(t_coder *coder);
 void	release_left_dongle(t_coder *coder);
 void	release_right_dongle(t_coder *coder);
+void	log_action(t_simulation *sim, int coder_id, char *log);
 
 #endif
