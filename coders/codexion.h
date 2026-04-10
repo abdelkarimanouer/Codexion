@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 11:26:55 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/10 12:03:16 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_simulation
 	long			dongle_cooldown;
 	char			*scheduler;
 	long long		start_time;
+	long long		time_since_compile;
 	int				stop_simulation;
 	t_coder			*coders;
 	t_dongle		*dongles;
