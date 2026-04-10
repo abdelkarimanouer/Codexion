@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 09:26:17 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 10:53:50 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/10 20:53:36 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,17 @@ int	start_threads(t_simulation *sim)
 			(void *)sim) != 0)
 		return (1);
 	return (0);
+}
+
+void	wait_threads(t_simulation *sim)
+{
+	int	i;
+
+	i = 0;
+	while (i < sim->number_of_coders)
+	{
+		pthread_join(sim->coders[i].thread, NULL);
+		i++;
+	}
+	pthread_join(sim->monitor_thread, NULL);
 }
