@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 20:46:55 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/10 21:30:11 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static int	initialize(t_simulation *sim, t_coder **coders,
 	if (!*dongles)
 		return (0);
 	sim->dongles = *dongles;
-	initialize_dongles(sim, *dongles);
+	if (!initialize_dongles(sim, *dongles))
+		return (0);
 	*coders = malloc(sizeof(t_coder) * sim->number_of_coders);
 	if (!*coders)
 		return (0);

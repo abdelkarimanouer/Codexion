@@ -6,13 +6,25 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 09:14:25 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/05 12:34:35 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/10 21:30:32 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	initialize_dongles(t_simulation *sim, t_dongle *dongles)
+static void	free_waiting_queue(t_simulation *sim, t_dongle **dongles, int i)
+{
+	int	j;
+
+	j = 0;
+	while (j < i)
+	{
+		free((*dongles)[j].waiting_queue);
+		j++;
+	}
+}
+
+int	initialize_dongles(t_simulation *sim, t_dongle *dongles)
 {
 	int	i;
 
@@ -23,8 +35,20 @@ void	initialize_dongles(t_simulation *sim, t_dongle *dongles)
 		pthread_cond_init(&dongles[i].condition, NULL);
 		dongles[i].cooldown_until = 0;
 		dongles[i].is_available = 1;
+		dongles[i].waiting_queue = (malloc(sizeof(t_coder *)
+					* sim->number_of_coders));
+		if (!dongles[i].waiting_queue)
+		{
+			free_waiting_queue(sim, &dongles, i);
+			return (0);
+		}
+		memset(dongles[i].waiting_queue, 0,
+			sizeof(t_coder *) * sim->number_of_coders);
+		dongles[i].waiting_capacity = sim->number_of_coders;
+		dongles[i].waiting_count = 0;
 		i++;
 	}
+	return (1);
 }
 
 void	initialize_mutexes(t_simulation *sim)
