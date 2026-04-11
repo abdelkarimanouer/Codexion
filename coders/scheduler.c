@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 20:59:35 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 21:57:08 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/11 21:16:54 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,23 @@ void	add_coder_to_queue(t_dongle *dongle, t_coder *coder, char *scheduler)
 	}
 	else
 		return ;
+}
+
+t_coder	*get_next_coder_from_queue(t_dongle *dongle)
+{
+	t_coder	*coder;
+	int		i;
+
+	if (dongle->waiting_count == 0)
+		return (NULL);
+	coder = dongle->waiting_queue[0];
+	i = 0;
+	while (i < dongle->waiting_count - 1)
+	{
+		dongle->waiting_queue[i] = dongle->waiting_queue[i + 1];
+		i++;
+	}
+	dongle->waiting_queue[i - 1] = NULL;
+	dongle->waiting_count--;
+	return (coder);
 }
