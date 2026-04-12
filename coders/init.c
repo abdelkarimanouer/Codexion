@@ -6,13 +6,13 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 09:14:25 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 21:30:32 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/12 14:11:22 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static void	free_waiting_queue(t_simulation *sim, t_dongle **dongles, int i)
+static void	free_waiting_queue(t_dongle **dongles, int i)
 {
 	int	j;
 
@@ -39,7 +39,7 @@ int	initialize_dongles(t_simulation *sim, t_dongle *dongles)
 					* sim->number_of_coders));
 		if (!dongles[i].waiting_queue)
 		{
-			free_waiting_queue(sim, &dongles, i);
+			free_waiting_queue(&dongles, i);
 			return (0);
 		}
 		memset(dongles[i].waiting_queue, 0,

@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 11:32:03 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 20:44:45 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/12 14:11:51 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	check_if_coders_compiled_enough(t_simulation *sim, int *i)
 		sim->stop_simulation = 1;
 }
 
-static long long	get_time(t_simulation *sim)
+static long long	get_time()
 {
 	struct timeval	tv;
 
@@ -44,7 +44,7 @@ void	*monitor_routine(void *arg)
 		i = 0;
 		while (i < sim->number_of_coders)
 		{
-			current_time = get_time(sim);
+			current_time = get_time();
 			sim->t_s_comp = current_time - sim->coders[i].last_compile_time;
 			if (sim->t_s_comp > (sim->time_to_burnout * 1000))
 			{
