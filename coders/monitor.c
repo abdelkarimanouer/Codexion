@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 11:32:03 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/12 14:41:45 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/12 14:46:40 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,8 @@ void	*monitor_routine(void *arg)
 {
 	t_simulation	*sim;
 	int				i;
-	int				should_continue;
 
 	sim = (t_simulation *)arg;
-	pthread_mutex_lock(&coder->sim->stop_mutex);
-	should_continue = (coder->sim->stop_simulation == 0);
-	pthread_mutex_unlock(&coder->sim->stop_mutex);
 	pthread_mutex_lock(&sim->stop_mutex);
 	while (sim->stop_simulation == 0)
 	{
