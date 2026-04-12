@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/10 21:30:11 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/12 14:01:03 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	free_clean_everything(t_simulation **sim, t_coder **coders,
 	{
 		pthread_mutex_destroy(&(*dongles)[i].mutex);
 		pthread_cond_destroy(&(*dongles)[i].condition);
+		free((*dongles)[i].waiting_queue);
 		i += 1;
 	}
 	pthread_mutex_destroy(&(*sim)->print_mutex);
