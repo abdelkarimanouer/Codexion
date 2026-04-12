@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 07:51:36 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/12 10:06:31 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/12 14:21:04 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static int	valid_args(t_simulation *sim)
 {
 	if (sim->number_of_coders <= 0 || sim->time_to_burnout <= 0
-		|| sim->time_to_compile <= 0 || sim->time_to_debug <= 0
-		|| sim->time_to_refactor <= 0 || sim->number_of_compiles_required <= 0
+		|| sim->time_to_compile <= 0 || sim->time_to_debug < 0
+		|| sim->time_to_refactor < 0 || sim->number_of_compiles_required <= 0
 		|| sim->dongle_cooldown <= 0
 		|| (strcmp(sim->scheduler, "fifo") != 0
 			&& strcmp(sim->scheduler, "edf") != 0)
