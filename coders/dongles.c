@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 13:25:16 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/11 21:48:45 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 13:16:21 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ void	take_left_dongle(t_coder *coder)
 	current_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
 	if (coder->left_dongle->cooldown_until > current_time
 		|| coder->left_dongle->is_available == 0)
-	{
 		add_coder_to_queue(coder->left_dongle, coder, coder->sim->scheduler);
-	}
 	while (coder->left_dongle->cooldown_until > current_time
 		|| coder->left_dongle->is_available == 0)
 	{
@@ -49,9 +47,7 @@ void	take_right_dongle(t_coder *coder)
 	current_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
 	if (coder->right_dongle->cooldown_until > current_time
 		|| coder->right_dongle->is_available == 0)
-	{
 		add_coder_to_queue(coder->right_dongle, coder, coder->sim->scheduler);
-	}
 	while (coder->right_dongle->cooldown_until > current_time
 		|| coder->right_dongle->is_available == 0)
 	{
