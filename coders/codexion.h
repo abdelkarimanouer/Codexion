@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/11 21:51:08 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 14:06:30 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ typedef struct s_simulation
 	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	stop_mutex;
 	pthread_t		monitor_thread;
+	int				turn_id;
+	pthread_mutex_t	turn_mutex;
+	pthread_cond_t	turn_cond;
 }	t_simulation;
 
 int		parsing_args(t_simulation *sim, char **v);

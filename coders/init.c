@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 09:14:25 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/13 13:18:46 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 14:08:04 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ void	initialize_mutexes(t_simulation *sim)
 
 	pthread_mutex_init(&sim->print_mutex, NULL);
 	pthread_mutex_init(&sim->stop_mutex, NULL);
+	pthread_mutex_init(&sim->turn_mutex, NULL);
+	pthread_cond_init(&sim->turn_cond, NULL);
+	sim->turn_id = 1;
 	sim->stop_simulation = 0;
 	gettimeofday(&tv, NULL);
 	sim->start_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;

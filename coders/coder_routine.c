@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 10:59:36 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/13 13:54:13 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 14:09:56 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,34 @@ static int	is_stopped(t_simulation *sim)
 	stopped = sim->stop_simulation;
 	pthread_mutex_unlock(&sim->stop_mutex);
 	return (stopped);
+}
+
+static int	wait_my_turn_or_stop(t_coder *coder)
+{
+	t_simulation	*sim;
+
+	sim = coder->sim;
+	pthread_mutex_lock(&sim->turn_mutex);
+	while (!is_stopped(sim) && sim->turn_id != coder->id)
+		pthread_cond_wait(&sim->turn_cond, &sim->turn_mutex);
+	if (is_stopped(sim))
+	{
+		pthread_mutex_unlock(&sim->turn_mutex);
+		return (0);
+	}
+	pthread_mutex_unlock(&sim->turn_mutex);
+	return (1);
+}
+
+static void	pass_turn(t_coder *coder)
+{
+	t_simulation	*sim;
+
+	sim = coder->sim;
+	pthread_mutex_lock(&sim->turn_mutex);
+	sim->turn_id = (sim->turn_id % sim->number_of_coders) + 1;
+	pthread_cond_broadcast(&sim->turn_cond);
+	pthread_mutex_unlock(&sim->turn_mutex);
 }
 
 static void	rest_of_code(t_coder *coder)
@@ -45,6 +73,8 @@ void	*coder_routine(void *arg)
 	coder = (t_coder *)arg;
 	while (!is_stopped(coder->sim))
 	{
+		if (!wait_my_turn_or_stop(coder))
+			return (NULL);
 		take_left_dongle(coder);
 		if (is_stopped(coder->sim))
 			return (NULL);
@@ -63,6 +93,7 @@ void	*coder_routine(void *arg)
 		pthread_mutex_unlock(&coder->sim->stop_mutex);
 		usleep(coder->sim->time_to_compile * 1000);
 		rest_of_code(coder);
+		pass_turn(coder);
 	}
 	return (NULL);
 }
