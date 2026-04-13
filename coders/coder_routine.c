@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 10:59:36 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/13 14:09:56 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 14:55:12 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,6 @@ static int	is_stopped(t_simulation *sim)
 	stopped = sim->stop_simulation;
 	pthread_mutex_unlock(&sim->stop_mutex);
 	return (stopped);
-}
-
-static int	wait_my_turn_or_stop(t_coder *coder)
-{
-	t_simulation	*sim;
-
-	sim = coder->sim;
-	pthread_mutex_lock(&sim->turn_mutex);
-	while (!is_stopped(sim) && sim->turn_id != coder->id)
-		pthread_cond_wait(&sim->turn_cond, &sim->turn_mutex);
-	if (is_stopped(sim))
-	{
-		pthread_mutex_unlock(&sim->turn_mutex);
-		return (0);
-	}
-	pthread_mutex_unlock(&sim->turn_mutex);
-	return (1);
 }
 
 static void	pass_turn(t_coder *coder)
@@ -64,34 +47,39 @@ static void	rest_of_code(t_coder *coder)
 	usleep(coder->sim->time_to_refactor * 1000);
 }
 
-void	*coder_routine(void *arg)
+static int	coder_compile_step(t_coder *coder)
 {
-	t_coder			*coder;
 	struct timeval	tv;
 	long long		current_time;
+
+	take_left_dongle(coder);
+	if (is_stopped(coder->sim))
+		return (0);
+	take_right_dongle(coder);
+	if (is_stopped(coder->sim))
+		return (release_left_dongle(coder), 0);
+	log_action(coder->sim, coder->id, "is compiling");
+	gettimeofday(&tv, NULL);
+	current_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
+	pthread_mutex_lock(&coder->sim->stop_mutex);
+	coder->last_compile_time = current_time;
+	coder->compile_count += 1;
+	pthread_mutex_unlock(&coder->sim->stop_mutex);
+	usleep(coder->sim->time_to_compile * 1000);
+	return (1);
+}
+
+void	*coder_routine(void *arg)
+{
+	t_coder	*coder;
 
 	coder = (t_coder *)arg;
 	while (!is_stopped(coder->sim))
 	{
 		if (!wait_my_turn_or_stop(coder))
 			return (NULL);
-		take_left_dongle(coder);
-		if (is_stopped(coder->sim))
+		if (!coder_compile_step(coder))
 			return (NULL);
-		take_right_dongle(coder);
-		if (is_stopped(coder->sim))
-		{
-			release_left_dongle(coder);
-			return (NULL);
-		}
-		log_action(coder->sim, coder->id, "is compiling");
-		gettimeofday(&tv, NULL);
-		current_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
-		pthread_mutex_lock(&coder->sim->stop_mutex);
-		coder->last_compile_time = current_time;
-		coder->compile_count += 1;
-		pthread_mutex_unlock(&coder->sim->stop_mutex);
-		usleep(coder->sim->time_to_compile * 1000);
 		rest_of_code(coder);
 		pass_turn(coder);
 	}

@@ -42,8 +42,8 @@ int	initialize_dongles(t_simulation *sim, t_dongle *dongles)
 			free_waiting_queue(&dongles, i);
 			return (0);
 		}
-		memset(dongles[i].waiting_queue, 0,
-			sizeof(t_coder *) * sim->number_of_coders);
+		memset(dongles[i].waiting_queue, 0, sizeof(t_coder *)
+			* sim->number_of_coders);
 		dongles[i].waiting_capacity = sim->number_of_coders;
 		dongles[i].waiting_count = 0;
 		i++;
@@ -65,8 +65,7 @@ void	initialize_mutexes(t_simulation *sim)
 	sim->start_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
 }
 
-void	initialize_coders(t_simulation *sim, t_coder *coders,
-	t_dongle *dongles)
+void	initialize_coders(t_simulation *sim, t_coder *coders, t_dongle *dongles)
 {
 	int	i;
 

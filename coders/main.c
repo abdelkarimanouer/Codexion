@@ -6,14 +6,13 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/13 14:17:52 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 15:11:10 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static int	initialize(t_simulation *sim, t_coder **coders,
-			t_dongle **dongles)
+static int	initialize(t_simulation *sim, t_coder **coders, t_dongle **dongles)
 {
 	initialize_mutexes(sim);
 	*dongles = malloc(sizeof(t_dongle) * sim->number_of_coders);
@@ -30,8 +29,16 @@ static int	initialize(t_simulation *sim, t_coder **coders,
 	return (1);
 }
 
+static void	rest_of_destroy(t_simulation **sim)
+{
+	pthread_mutex_destroy(&(*sim)->print_mutex);
+	pthread_mutex_destroy(&(*sim)->stop_mutex);
+	pthread_mutex_destroy(&(*sim)->turn_mutex);
+	pthread_cond_destroy(&(*sim)->turn_cond);
+}
+
 void	free_clean_everything(t_simulation **sim, t_coder **coders,
-			t_dongle **dongles)
+		t_dongle **dongles)
 {
 	int	i;
 
@@ -50,10 +57,7 @@ void	free_clean_everything(t_simulation **sim, t_coder **coders,
 		free(*dongles);
 		*dongles = NULL;
 	}
-	pthread_mutex_destroy(&(*sim)->print_mutex);
-	pthread_mutex_destroy(&(*sim)->stop_mutex);
-	pthread_mutex_destroy(&(*sim)->turn_mutex);
-	pthread_cond_destroy(&(*sim)->turn_cond);
+	rest_of_destroy(sim);
 	if (coders && *coders)
 	{
 		free(*coders);
@@ -63,8 +67,7 @@ void	free_clean_everything(t_simulation **sim, t_coder **coders,
 	*sim = NULL;
 }
 
-int	start(t_simulation **sim, t_coder **coders,
-			t_dongle **dongles, char **argv)
+int	start(t_simulation **sim, t_coder **coders, t_dongle **dongles, char **argv)
 {
 	*coders = NULL;
 	*dongles = NULL;
@@ -88,7 +91,8 @@ int	main(int argc, char **argv)
 	t_coder			*coders;
 
 	if (argc != 9)
-		return (fprintf(stderr, "[ERROR]: Number of Args should be Exactly "
+		return (fprintf(stderr,
+				"[ERROR]: Number of Args should be Exactly "
 				"9 with program name!\n"), 1);
 	sim = malloc(sizeof(t_simulation));
 	if (!sim)
