@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/13 14:15:12 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 14:17:52 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,32 @@ void	free_clean_everything(t_simulation **sim, t_coder **coders,
 {
 	int	i;
 
-	if (!*sim)
+	if (!sim || !*sim)
 		return ;
-	i = 0;
-	while (i < (*sim)->number_of_coders && *dongles)
+	if (dongles && *dongles)
 	{
-		pthread_mutex_destroy(&(*dongles)[i].mutex);
-		pthread_cond_destroy(&(*dongles)[i].condition);
-		free((*dongles)[i].waiting_queue);
-		i += 1;
+		i = 0;
+		while (i < (*sim)->number_of_coders)
+		{
+			pthread_mutex_destroy(&(*dongles)[i].mutex);
+			pthread_cond_destroy(&(*dongles)[i].condition);
+			free((*dongles)[i].waiting_queue);
+			i++;
+		}
+		free(*dongles);
+		*dongles = NULL;
 	}
 	pthread_mutex_destroy(&(*sim)->print_mutex);
 	pthread_mutex_destroy(&(*sim)->stop_mutex);
 	pthread_mutex_destroy(&(*sim)->turn_mutex);
 	pthread_cond_destroy(&(*sim)->turn_cond);
+	if (coders && *coders)
+	{
+		free(*coders);
+		*coders = NULL;
+	}
 	free(*sim);
-	free(*coders);
-	free(*dongles);
+	*sim = NULL;
 }
 
 int	start(t_simulation **sim, t_coder **coders,

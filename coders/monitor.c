@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 11:32:03 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/13 14:11:23 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 14:22:05 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int	check_burnout(t_simulation *sim)
 			return (1);
 		}
 		sim->t_s_comp = current_time - sim->coders[i].last_compile_time;
-		if (sim->t_s_comp > (sim->time_to_burnout * 1000))
+		if (sim->t_s_comp >= (sim->time_to_burnout * 1000))
 		{
 			sim->stop_simulation = 1;
 			pthread_mutex_unlock(&sim->stop_mutex);
@@ -104,9 +104,9 @@ void	*monitor_routine(void *arg)
 			break ;
 		}
 		pthread_mutex_unlock(&sim->stop_mutex);
-		if (check_burnout(sim))
-			break ;
 		if (check_if_coders_compiled_enough(sim))
+			break ;
+		if (check_burnout(sim))
 			break ;
 		usleep(1000);
 	}
