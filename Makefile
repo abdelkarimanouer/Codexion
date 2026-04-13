@@ -2,7 +2,7 @@ NAME=codexion
 CFLAGS = -Wall -Wextra -Werror -pthread
 SRC=coders/dongles.c coders/logging.c coders/parsing.c\
 coders/coder_routine.c coders/main.c coders/scheduler.c\
-coders/init.c coders/monitor.c coders/threads.c
+coders/init.c coders/monitor.c coders/threads.c coders/utils.c
 OBJ=$(SRC:%.c=%.o)
 INC=coders/codexion.h
 
