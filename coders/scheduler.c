@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 20:59:35 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/11 21:29:46 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 13:35:44 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_coder	*get_next_coder_from_queue(t_dongle *dongle)
 		dongle->waiting_queue[i] = dongle->waiting_queue[i + 1];
 		i++;
 	}
-	dongle->waiting_queue[i - 1] = NULL;
+	dongle->waiting_queue[dongle->waiting_count - 1] = NULL;
 	dongle->waiting_count--;
 	return (coder);
 }
@@ -80,6 +80,6 @@ void	remove_coder_from_queue(t_dongle *dongle, t_coder *coder)
 		dongle->waiting_queue[j] = dongle->waiting_queue[j + 1];
 		j++;
 	}
-	dongle->waiting_queue[j - 1] = NULL;
+	dongle->waiting_queue[dongle->waiting_count - 1] = NULL;
 	dongle->waiting_count--;
 }

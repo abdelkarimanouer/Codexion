@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/10 11:32:03 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/13 13:25:11 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 13:37:11 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ static void	check_if_coders_compiled_enough(t_simulation *sim, int *i)
 	{
 		pthread_mutex_lock(&sim->stop_mutex);
 		sim->stop_simulation = 1;
-		wake_all_waiters(sim);
 		pthread_mutex_unlock(&sim->stop_mutex);
+		wake_all_waiters(sim);
 	}
 }
 
@@ -72,8 +72,8 @@ static void	check_burnout(t_simulation *sim, int *i)
 			log_action(sim, sim->coders[*i].id, "burned out");
 			pthread_mutex_lock(&sim->stop_mutex);
 			sim->stop_simulation = 1;
-			wake_all_waiters(sim);
 			pthread_mutex_unlock(&sim->stop_mutex);
+			wake_all_waiters(sim);
 			break ;
 		}
 		(*i)++;
