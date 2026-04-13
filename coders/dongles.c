@@ -22,6 +22,15 @@ static int	is_stopped(t_simulation *sim)
 	return (stopped);
 }
 
+static void	wait_until_cooldown_over(t_dongle *dongle, long long cooldown_until)
+{
+	struct timespec	ts;
+
+	ts.tv_sec = cooldown_until / 1000000LL;
+	ts.tv_nsec = (cooldown_until % 1000000LL) * 1000LL;
+	pthread_cond_timedwait(&dongle->condition, &dongle->mutex, &ts);
+}
+
 void	take_left_dongle(t_coder *coder)
 {
 	struct timeval	tv;
@@ -41,8 +50,13 @@ void	take_left_dongle(t_coder *coder)
 			pthread_mutex_unlock(&coder->left_dongle->mutex);
 			return ;
 		}
-		pthread_cond_wait(&coder->left_dongle->condition,
-			&coder->left_dongle->mutex);
+		if (coder->left_dongle->is_available
+			&& coder->left_dongle->cooldown_until > current_time)
+			wait_until_cooldown_over(coder->left_dongle,
+				coder->left_dongle->cooldown_until);
+		else
+			pthread_cond_wait(&coder->left_dongle->condition,
+				&coder->left_dongle->mutex);
 		gettimeofday(&tv, NULL);
 		current_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
 	}
@@ -76,8 +90,13 @@ void	take_right_dongle(t_coder *coder)
 			pthread_mutex_unlock(&coder->right_dongle->mutex);
 			return ;
 		}
-		pthread_cond_wait(&coder->right_dongle->condition,
-			&coder->right_dongle->mutex);
+		if (coder->right_dongle->is_available
+			&& coder->right_dongle->cooldown_until > current_time)
+			wait_until_cooldown_over(coder->right_dongle,
+				coder->right_dongle->cooldown_until);
+		else
+			pthread_cond_wait(&coder->right_dongle->condition,
+				&coder->right_dongle->mutex);
 		gettimeofday(&tv, NULL);
 		current_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
 	}
