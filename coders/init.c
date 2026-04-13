@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 09:14:25 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/12 14:11:22 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 13:18:46 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	initialize_coders(t_simulation *sim, t_coder *coders,
 		coders[i].id = i + 1;
 		coders[i].compile_count = 0;
 		coders[i].last_compile_time = sim->start_time;
-		coders[i].deadline = sim->start_time + sim->time_to_burnout;
+		coders[i].deadline = sim->start_time + (sim->time_to_burnout * 1000);
 		coders[i].sim = sim;
 		coders[i].left_dongle = &dongles[i];
 		coders[i].right_dongle = &dongles[(i + 1) % sim->number_of_coders];

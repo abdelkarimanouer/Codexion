@@ -6,11 +6,21 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 13:25:16 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/13 13:16:21 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/13 13:24:01 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
+
+static int	is_stopped(t_simulation *sim)
+{
+	int	stopped;
+
+	pthread_mutex_lock(&sim->stop_mutex);
+	stopped = sim->stop_simulation;
+	pthread_mutex_unlock(&sim->stop_mutex);
+	return (stopped);
+}
 
 void	take_left_dongle(t_coder *coder)
 {
@@ -26,12 +36,22 @@ void	take_left_dongle(t_coder *coder)
 	while (coder->left_dongle->cooldown_until > current_time
 		|| coder->left_dongle->is_available == 0)
 	{
+		if (is_stopped(coder->sim))
+		{
+			pthread_mutex_unlock(&coder->left_dongle->mutex);
+			return ;
+		}
 		pthread_cond_wait(&coder->left_dongle->condition,
 			&coder->left_dongle->mutex);
 		gettimeofday(&tv, NULL);
 		current_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
 	}
 	remove_coder_from_queue(coder->left_dongle, coder);
+	if (is_stopped(coder->sim))
+	{
+		pthread_mutex_unlock(&coder->left_dongle->mutex);
+		return ;
+	}
 	coder->left_dongle->is_available = 0;
 	pthread_mutex_unlock(&coder->left_dongle->mutex);
 	log_action(coder->sim, coder->id, "has taken a dongle");
@@ -51,12 +71,22 @@ void	take_right_dongle(t_coder *coder)
 	while (coder->right_dongle->cooldown_until > current_time
 		|| coder->right_dongle->is_available == 0)
 	{
+		if (is_stopped(coder->sim))
+		{
+			pthread_mutex_unlock(&coder->right_dongle->mutex);
+			return ;
+		}
 		pthread_cond_wait(&coder->right_dongle->condition,
 			&coder->right_dongle->mutex);
 		gettimeofday(&tv, NULL);
 		current_time = (long long)tv.tv_sec * 1000000LL + tv.tv_usec;
 	}
 	remove_coder_from_queue(coder->right_dongle, coder);
+	if (is_stopped(coder->sim))
+	{
+		pthread_mutex_unlock(&coder->right_dongle->mutex);
+		return ;
+	}
 	coder->right_dongle->is_available = 0;
 	pthread_mutex_unlock(&coder->right_dongle->mutex);
 	log_action(coder->sim, coder->id, "has taken a dongle");
