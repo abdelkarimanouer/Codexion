@@ -1,4 +1,5 @@
 NAME=codexion
+CC=cc
 CFLAGS = -Wall -Wextra -Werror -pthread
 SRC=parsing.c main.c
 OBJ=$(SRC:%.c=%.o)
