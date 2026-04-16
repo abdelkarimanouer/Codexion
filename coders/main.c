@@ -6,79 +6,25 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/13 15:11:10 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/16 13:23:53 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static int	initialize(t_simulation *sim, t_coder **coders, t_dongle **dongles)
+void	free_clean_everything(t_simulation **sim)
 {
-	initialize_mutexes(sim);
-	*dongles = malloc(sizeof(t_dongle) * sim->number_of_coders);
-	if (!*dongles)
-		return (0);
-	sim->dongles = *dongles;
-	if (!initialize_dongles(sim, *dongles))
-		return (0);
-	*coders = malloc(sizeof(t_coder) * sim->number_of_coders);
-	if (!*coders)
-		return (0);
-	sim->coders = *coders;
-	initialize_coders(sim, *coders, *dongles);
-	return (1);
-}
-
-static void	rest_of_destroy(t_simulation **sim)
-{
-	pthread_mutex_destroy(&(*sim)->print_mutex);
-	pthread_mutex_destroy(&(*sim)->stop_mutex);
-	pthread_mutex_destroy(&(*sim)->turn_mutex);
-	pthread_cond_destroy(&(*sim)->turn_cond);
-}
-
-void	free_clean_everything(t_simulation **sim, t_coder **coders,
-		t_dongle **dongles)
-{
-	int	i;
-
 	if (!sim || !*sim)
 		return ;
-	if (dongles && *dongles)
-	{
-		i = 0;
-		while (i < (*sim)->number_of_coders)
-		{
-			pthread_mutex_destroy(&(*dongles)[i].mutex);
-			pthread_cond_destroy(&(*dongles)[i].condition);
-			free((*dongles)[i].waiting_queue);
-			i++;
-		}
-		free(*dongles);
-		*dongles = NULL;
-	}
-	rest_of_destroy(sim);
-	if (coders && *coders)
-	{
-		free(*coders);
-		*coders = NULL;
-	}
 	free(*sim);
 	*sim = NULL;
 }
 
-int	start(t_simulation **sim, t_coder **coders, t_dongle **dongles, char **argv)
+int	start(t_simulation **sim, char **argv)
 {
-	*coders = NULL;
-	*dongles = NULL;
 	if (!parsing_args(*sim, argv))
 	{
 		free(*sim);
-		return (1);
-	}
-	if (!initialize(*sim, coders, dongles))
-	{
-		free_clean_everything(sim, coders, dongles);
 		return (1);
 	}
 	return (0);
@@ -87,8 +33,6 @@ int	start(t_simulation **sim, t_coder **coders, t_dongle **dongles, char **argv)
 int	main(int argc, char **argv)
 {
 	t_simulation	*sim;
-	t_dongle		*dongles;
-	t_coder			*coders;
 
 	if (argc != 9)
 		return (fprintf(stderr,
@@ -97,9 +41,8 @@ int	main(int argc, char **argv)
 	sim = malloc(sizeof(t_simulation));
 	if (!sim)
 		return (fprintf(stderr, "[ERROR]: Memory allocation failed"), 1);
-	if (start(&sim, &coders, &dongles, argv))
+	if (start(&sim, argv))
 		return (fprintf(stderr, "[ERROR]: bad_args or mem_alloc_fail\n"), 1);
-	start_threads(sim);
-	wait_threads(sim);
-	return (free_clean_everything(&sim, &coders, &dongles), 0);
+
+	return (free_clean_everything(&sim), 0);
 }
