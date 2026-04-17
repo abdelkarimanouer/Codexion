@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/17 16:36:16 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/17 16:36:59 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 
 typedef struct s_request
 {
-	int			coder_id;
-	long long	ticket_number;
-	long long	deadline;
+	int					coder_id;
+	unsigned long long	ticket_number;
+	unsigned long long	deadline;
 }			t_request;
 
 typedef struct s_simulation
