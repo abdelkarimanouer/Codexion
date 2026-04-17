@@ -1,7 +1,7 @@
 NAME=codexion
 CC=cc
 CFLAGS = -Wall -Wextra -Werror -pthread
-SRC=parsing.c main.c init.c
+SRC=parsing.c main.c init.c queue.c
 OBJ=$(SRC:%.c=%.o)
 INC=coders/codexion.h
 
