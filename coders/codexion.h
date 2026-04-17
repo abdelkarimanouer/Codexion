@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/17 15:37:58 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/17 16:36:16 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@
 # include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
+
+typedef struct s_request
+{
+	int			coder_id;
+	long long	ticket_number;
+	long long	deadline;
+}			t_request;
 
 typedef struct s_simulation
 {
