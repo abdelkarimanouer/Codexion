@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 07:51:36 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/12 14:21:04 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/17 15:18:53 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,36 @@ static int	valid_args(t_simulation *sim)
 		return (1);
 }
 
+static int	is_num(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] < '0' || s[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	parsing_args(t_simulation *sim, char **v)
 {
-	sim->number_of_coders = atoi(v[1]);
-	sim->time_to_burnout = atoi(v[2]);
-	sim->time_to_compile = atoi(v[3]);
-	sim->time_to_debug = atoi(v[4]);
-	sim->time_to_refactor = atoi(v[5]);
-	sim->number_of_compiles_required = atoi(v[6]);
-	sim->dongle_cooldown = atoi(v[7]);
+	if (is_num(v[1]))
+		sim->number_of_coders = atoi(v[1]);
+	if (is_num(v[1]))
+		sim->time_to_burnout = atoi(v[2]);
+	if (is_num(v[1]))
+		sim->time_to_compile = atoi(v[3]);
+	if (is_num(v[1]))
+		sim->time_to_debug = atoi(v[4]);
+	if (is_num(v[1]))
+		sim->time_to_refactor = atoi(v[5]);
+	if (is_num(v[1]))
+		sim->number_of_compiles_required = atoi(v[6]);
+	if (is_num(v[1]))
+		sim->dongle_cooldown = atoi(v[7]);
 	sim->scheduler = v[8];
 	if (valid_args(sim))
 		return (1);
