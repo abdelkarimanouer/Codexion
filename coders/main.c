@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/17 15:57:58 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/17 15:59:22 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	main(int argc, char **argv)
 	sim = malloc(sizeof(t_simulation));
 	if (!sim)
 		return (fprintf(stderr, "[ERROR]: Memory allocation failed"), 1);
-	init_simulation_with_default_values(sim);
+	init_simulation_with_default_values(&sim);
 	if (start(&sim, argv))
 		return (fprintf(stderr, "[ERROR]: bad_args or mem_alloc_fail\n"), 1);
 
