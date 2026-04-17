@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/17 15:17:43 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/17 15:40:44 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	main(int argc, char **argv)
 				"[ERROR]: Number of Args should be Exactly "
 				"9 with program name!\n"), 1);
 	sim = malloc(sizeof(t_simulation));
+	init_simulation_with_default_values(&sim);
 	if (!sim)
 		return (fprintf(stderr, "[ERROR]: Memory allocation failed"), 1);
 	if (start(&sim, argv))

@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/17 15:17:48 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/17 15:37:58 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,17 @@
 
 typedef struct s_simulation
 {
-	long				number_of_coders;
-	long				time_to_burnout;
-	long				time_to_compile;
-	long				time_to_debug;
-	long				time_to_refactor;
-	long				number_of_compiles_required;
-	long				dongle_cooldown;
-	char				*scheduler;
-}						t_simulation;
+	long	number_of_coders;
+	long	time_to_burnout;
+	long	time_to_compile;
+	long	time_to_debug;
+	long	time_to_refactor;
+	long	number_of_compiles_required;
+	long	dongle_cooldown;
+	char	*scheduler;
+}			t_simulation;
 
 int	parsing_args(t_simulation *sim, char **v);
+void	init_simulation_with_default_values(t_simulation **sim);
 
 #endif
