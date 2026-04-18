@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 18:11:24 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 11:21:55 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/18 11:22:38 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	push_request(t_queue *queue, t_request new_request, char *scheduler)
 			queue->requests[i] = queue->requests[the_winner];
 			queue->requests[the_winner] = temp;
 		}
+		else
+			break;
 		i = the_winner;
 	}
 }
