@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 18:11:24 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 11:11:56 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/18 11:13:18 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,6 @@ void	pop_request(t_queue *queue, char *scheduler)
 	temp = queue->requests[i];
 	queue->requests[i] = queue->requests[0];
 	queue->requests[0] = temp;
-	bubble_down(queue, 0, scheduler);
+	reorder_queue(queue, 0, scheduler);
 	free(removed_request);
 }
