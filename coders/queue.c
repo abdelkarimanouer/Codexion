@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 18:11:24 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 11:14:00 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/18 11:18:09 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ static void	reorder_queue(t_queue *queue, int i, char *scheduler)
 			&& goes_first(queue->requests[right_child],
 				queue->requests[left_child], scheduler))
 			the_winner = right_child;
-		if (!goes_first(queue->requests[the_winner], queue->requests[i], scheduler))
+		if (!goes_first(queue->requests[the_winner],
+				queue->requests[i], scheduler))
 			break ;
 		temp = queue->requests[i];
 		queue->requests[i] = queue->requests[the_winner];

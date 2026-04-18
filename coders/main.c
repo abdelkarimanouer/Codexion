@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 11:16:41 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/18 11:18:18 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,5 @@ int	main(int argc, char **argv)
 	init_queue_with_default_values(&queue, sim->number_of_coders);
 	if (start(&sim, argv))
 		return (fprintf(stderr, "[ERROR]: bad_args or mem_alloc_fail\n"), 1);
-
 	return (free_clean_everything(&sim), 0);
 }
