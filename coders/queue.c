@@ -6,13 +6,13 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 18:11:24 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 11:10:13 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/18 11:11:56 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	goes_first(t_request a, t_request b, char *scheduler)
+static int	goes_first(t_request a, t_request b, char *scheduler)
 {
 	if (strcmp(scheduler, "fifo") == 0)
 	{
@@ -55,7 +55,7 @@ void	push_request(t_queue *queue, t_request new_request, char *scheduler)
 	}
 }
 
-void	reorder_queue(t_queue *queue, int i, char *scheduler)
+static void	reorder_queue(t_queue *queue, int i, char *scheduler)
 {
 	int			left_child;
 	int			right_child;
