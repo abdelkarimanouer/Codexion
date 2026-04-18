@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 18:11:24 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 11:18:09 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/18 11:21:55 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,18 +84,14 @@ static void	reorder_queue(t_queue *queue, int i, char *scheduler)
 void	pop_request(t_queue *queue, char *scheduler)
 {
 	t_request	temp;
-	t_request	*removed_request;
 	int			i;
 
 	if (queue->number_of_tickets <= 0)
 		return ;
 	queue->number_of_tickets--;
-	removed_request = &(queue->requests[0]);
 	i = queue->number_of_tickets;
 	temp = queue->requests[i];
 	queue->requests[i] = queue->requests[0];
 	queue->requests[0] = temp;
 	reorder_queue(queue, 0, scheduler);
-	free(removed_request);
-	removed_request = NULL;
 }
