@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 18:11:24 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 09:14:46 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/18 11:10:13 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,36 +59,41 @@ void	reorder_queue(t_queue *queue, int i, char *scheduler)
 {
 	int			left_child;
 	int			right_child;
-	int			best;
+	int			the_winner;
 	t_request	temp;
 
 	while ((2 * i) + 1 < queue->number_of_tickets)
 	{
 		left_child = (2 * i) + 1;
 		right_child = (2 * i) + 2;
-		best = left_child;
+		the_winner = left_child;
 		if (right_child < queue->number_of_tickets
 			&& goes_first(queue->requests[right_child],
 				queue->requests[left_child], scheduler))
-			best = right_child;
-		if (!goes_first(queue->requests[best], queue->requests[i], scheduler))
+			the_winner = right_child;
+		if (!goes_first(queue->requests[the_winner], queue->requests[i], scheduler))
 			break ;
 		temp = queue->requests[i];
-		queue->requests[i] = queue->requests[best];
-		queue->requests[best] = temp;
-		i = best;
+		queue->requests[i] = queue->requests[the_winner];
+		queue->requests[the_winner] = temp;
+		i = the_winner;
 	}
 }
 
 void	pop_request(t_queue *queue, char *scheduler)
 {
 	t_request	temp;
+	t_request	*removed_request;
+	int			i;
 
 	if (queue->number_of_tickets <= 0)
 		return ;
 	queue->number_of_tickets--;
-	temp = queue->requests[queue->number_of_tickets];
-	queue->requests[queue->number_of_tickets] = queue->requests[0];
+	removed_request = &(queue->requests[0]);
+	i = queue->number_of_tickets;
+	temp = queue->requests[i];
+	queue->requests[i] = queue->requests[0];
 	queue->requests[0] = temp;
 	bubble_down(queue, 0, scheduler);
+	free(removed_request);
 }
