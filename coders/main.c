@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 05:47:53 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/18 11:16:41 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	main(int argc, char **argv)
 	queue = malloc(sizeof(t_queue));
 	if (!queue)
 		return (fprintf(stderr, "[ERROR]: Memory allocation failed"), 1);
-	init_simulation_with_default_values(&queue);
+	init_queue_with_default_values(&queue, sim->number_of_coders);
 	if (start(&sim, argv))
 		return (fprintf(stderr, "[ERROR]: bad_args or mem_alloc_fail\n"), 1);
 
