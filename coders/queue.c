@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 18:11:24 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 06:10:17 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/18 09:14:46 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	push_request(t_queue *queue, t_request new_request, char *scheduler)
 	while (i > 0)
 	{
 		the_winner = (i - 1) / 2;
-		if (goes_first(queue->requests[i], queue->requests[the_winner], scheduler))
+		if (goes_first(queue->requests[i],
+				queue->requests[the_winner], scheduler))
 		{
 			temp = queue->requests[i];
 			queue->requests[i] = queue->requests[the_winner];
@@ -52,4 +53,42 @@ void	push_request(t_queue *queue, t_request new_request, char *scheduler)
 		}
 		i = the_winner;
 	}
+}
+
+void	reorder_queue(t_queue *queue, int i, char *scheduler)
+{
+	int			left_child;
+	int			right_child;
+	int			best;
+	t_request	temp;
+
+	while ((2 * i) + 1 < queue->number_of_tickets)
+	{
+		left_child = (2 * i) + 1;
+		right_child = (2 * i) + 2;
+		best = left_child;
+		if (right_child < queue->number_of_tickets
+			&& goes_first(queue->requests[right_child],
+				queue->requests[left_child], scheduler))
+			best = right_child;
+		if (!goes_first(queue->requests[best], queue->requests[i], scheduler))
+			break ;
+		temp = queue->requests[i];
+		queue->requests[i] = queue->requests[best];
+		queue->requests[best] = temp;
+		i = best;
+	}
+}
+
+void	pop_request(t_queue *queue, char *scheduler)
+{
+	t_request	temp;
+
+	if (queue->number_of_tickets <= 0)
+		return ;
+	queue->number_of_tickets--;
+	temp = queue->requests[queue->number_of_tickets];
+	queue->requests[queue->number_of_tickets] = queue->requests[0];
+	queue->requests[0] = temp;
+	bubble_down(queue, 0, scheduler);
 }
