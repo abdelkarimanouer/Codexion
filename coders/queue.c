@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 18:11:24 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 11:22:38 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/19 10:59:43 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	push_request(t_queue *queue, t_request new_request, char *scheduler)
 			queue->requests[the_winner] = temp;
 		}
 		else
-			break;
+			break ;
 		i = the_winner;
 	}
 }
@@ -96,4 +96,11 @@ void	pop_request(t_queue *queue, char *scheduler)
 	queue->requests[i] = queue->requests[0];
 	queue->requests[0] = temp;
 	reorder_queue(queue, 0, scheduler);
+}
+
+t_request	*get_the_winner(t_queue *queue)
+{
+	if (!queue || queue->number_of_tickets <= 0 || !queue->requests)
+		return (NULL);
+	return (&(queue->requests[0]));
 }
