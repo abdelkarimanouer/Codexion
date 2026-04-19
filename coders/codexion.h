@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/19 11:00:21 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/19 11:46:09 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 typedef struct s_request
 {
-	int					coder_id;
+	unsigned long		coder_id;
 	unsigned long long	ticket_number;
 	unsigned long long	deadline;
 }			t_request;
@@ -29,16 +29,46 @@ typedef struct s_queue
 	long				max_nums_of_tickets;
 }			t_queue;
 
+typedef struct s_dongle
+{
+	pthread_mutex_t	lock_dongle;
+	pthread_cond_t	condition;
+	int				is_available;
+	unsigned long	cooldown_end;
+	struct s_queue	*queue;
+}			t_dongle;
+
+typedef struct s_coder
+{
+	unsigned long		id;
+	pthread_t			coder_thread;
+	unsigned long		compile_count;
+	unsigned long long	last_compile_start;
+	pthread_mutex_t		lock_l_c_s;
+	struct s_dongle		*left_dongle;
+	struct s_dongle		*right_dongle;
+}			t_coder;
+
 typedef struct s_simulation
 {
-	long	number_of_coders;
-	long	time_to_burnout;
-	long	time_to_compile;
-	long	time_to_debug;
-	long	time_to_refactor;
-	long	number_of_compiles_required;
-	long	dongle_cooldown;
-	char	*scheduler;
+	unsigned long	number_of_coders;
+	unsigned long	time_to_burnout;
+	unsigned long	time_to_compile;
+	unsigned long	time_to_debug;
+	unsigned long	time_to_refactor;
+	unsigned long	number_of_compiles_required;
+	unsigned long	dongle_cooldown;
+	unsigned long long	start_timestamp;
+	struct s_coder		*coders;
+	struct s_dongle		*dongles;
+	pthread_t			monitor;
+	int					stop;
+	pthread_mutex_t		stop_mutex;
+	int					print;
+	pthread_mutex_t		print_mutex;
+	unsigned long long	ticket_count;
+	pthread_mutex_t		ticket_count_mutex;
+	char			*scheduler;
 }			t_simulation;
 
 int			parsing_args(t_simulation *sim, char **v);
