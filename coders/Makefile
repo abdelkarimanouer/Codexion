@@ -9,8 +9,10 @@ all:$(NAME)
 
 $(NAME) : $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	@echo "\033[1;32m✓ $(NAME) successfully compiled!\033[0m"
 
 %.o : %.c $(INC)
+	@echo "\033[0;34m⟳ Compiling $<...\033[0m"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
