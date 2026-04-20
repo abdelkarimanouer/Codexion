@@ -1,9 +1,10 @@
 NAME=codexion
 CC=cc
 CFLAGS = -Wall -Wextra -Werror -pthread
-SRC=parsing.c main.c init_part_1.c init_part_2.c queue.c utils.c threads.c
+SRC=coders/parsing.c coders/main.c coders/init_part_1.c coders/init_part_2.c\
+coders/queue.c coders/utils.c coders/threads.c
 OBJ=$(SRC:%.c=%.o)
-INC=codexion.h headers.h
+INC=coders/codexion.h coders/headers.h
 
 all:$(NAME)
 

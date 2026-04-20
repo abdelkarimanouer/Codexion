@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/20 10:04:56 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/20 15:25:33 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_simulation
 	unsigned long		time_to_refactor;
 	unsigned long		number_of_compiles_required;
 	unsigned long		dongle_cooldown;
+	char				*scheduler;
 	unsigned long long	start_timestamp;
 	struct s_coder		*coders;
 	struct s_dongle		*dongles;
@@ -69,7 +70,6 @@ typedef struct s_simulation
 	pthread_mutex_t		print_mutex;
 	unsigned long long	ticket_count;
 	pthread_mutex_t		ticket_count_mutex;
-	char				*scheduler;
 }						t_simulation;
 
 int					parsing_args(t_simulation *sim, char **v);
