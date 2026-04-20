@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 15:35:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/20 05:40:25 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/20 05:49:21 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ void	init_simulation_with_default_values(t_simulation **sim)
 	(*sim)->number_of_compiles_required = -1;
 	(*sim)->dongle_cooldown = -1;
 	(*sim)->scheduler = "";
+}
+
+static void	init_queue_with_default_values(t_queue **queue, long n_of_coders)
+{
+	(*queue)->number_of_tickets = 0;
+	(*queue)->max_nums_of_tickets = n_of_coders;
 }
 
 int	init_dongles_and_coders(t_simulation **sim)
@@ -41,9 +47,10 @@ int	init_queue_of_dongles(t_dongle **dongles, int number_of_coders)
 	i = 0;
 	while (i < number_of_coders)
 	{
-		(*dongles)->queue = malloc(sizeof(t_queue) * number_of_coders);
-		if (!(*dongles)->queue)
+		(*dongles)[i].queue = malloc(sizeof(t_queue));
+		if (!(*dongles)[i].queue)
 			return (free_queues(dongles, i), 0);
+		init_queue_with_default_values(&(*dongles)[i].queue, number_of_coders);
 		i++;
 	}
 	return (1);
