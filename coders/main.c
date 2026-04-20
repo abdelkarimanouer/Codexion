@@ -6,13 +6,25 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/18 11:18:18 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/20 05:19:04 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	free_clean_everything(t_simulation **sim)
+static int	allocate_dongles_and_coders(t_simulation *sim, t_coder **coders,
+	t_dongle **dongles)
+{
+	*coders = malloc(sizeof(t_coder) * sim->number_of_coders);
+	if (!(*coders))
+		return (0);
+	*dongles = malloc(sizeof(t_dongle) * sim->number_of_coders);
+	if (!(*dongles))
+		return (0);
+	return (1);
+}
+
+static void	free_clean_everything(t_simulation **sim)
 {
 	if (!sim || !*sim)
 		return ;
@@ -20,13 +32,13 @@ void	free_clean_everything(t_simulation **sim)
 	*sim = NULL;
 }
 
-int	start(t_simulation **sim, char **argv)
+static int	start(t_simulation **sim, t_coder **coders, t_dongle **dongles,
+	char **argv)
 {
 	if (!parsing_args(*sim, argv))
-	{
-		free(*sim);
-		return (1);
-	}
+		return (free(*sim), 1);
+	if (allocate_dongles_and_coders(*sim, coders, dongles))
+		return (free(*coders), free(*dongles), 1);
 	return (0);
 }
 
@@ -34,6 +46,8 @@ int	main(int argc, char **argv)
 {
 	t_simulation	*sim;
 	t_queue			*queue;
+	t_coder			*coders;
+	t_dongle		*dongles;
 
 	if (argc != 9)
 		return (fprintf(stderr,
@@ -47,7 +61,7 @@ int	main(int argc, char **argv)
 	if (!queue)
 		return (fprintf(stderr, "[ERROR]: Memory allocation failed"), 1);
 	init_queue_with_default_values(&queue, sim->number_of_coders);
-	if (start(&sim, argv))
+	if (start(&sim, &coders, &dongles, argv))
 		return (fprintf(stderr, "[ERROR]: bad_args or mem_alloc_fail\n"), 1);
 	return (free_clean_everything(&sim), 0);
 }
