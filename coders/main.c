@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/20 06:08:02 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/20 08:32:30 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static int	start(t_simulation **sim, char **argv)
 		free(*sim);
 		return (1);
 	}
+	init_mutexes_and_dongles(*sim);
+	init_coders(*sim);
 	return (0);
 }
 
