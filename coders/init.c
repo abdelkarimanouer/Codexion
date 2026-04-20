@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 15:35:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/20 05:53:58 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/20 05:57:30 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	init_queue_of_dongles(t_dongle **dongles, int number_of_coders)
 		if (!(*dongles)[i].queue)
 			return (free_queues(dongles, i), 0);
 		if (!init_queue_with_default_values(&(*dongles)[i].queue, number_of_coders))
-			return (free_queues(dongles, i), 0);
+			return (free((*dongles)[i].queue) , free_queues(dongles, i), 0);
 		i++;
 	}
 	return (1);
