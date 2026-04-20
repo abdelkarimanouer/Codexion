@@ -44,8 +44,8 @@ void	push_request(t_queue *queue, t_request new_request, char *scheduler)
 	while (i > 0)
 	{
 		the_winner = (i - 1) / 2;
-		if (goes_first(queue->requests[i],
-				queue->requests[the_winner], scheduler))
+		if (goes_first(queue->requests[i], queue->requests[the_winner],
+				scheduler))
 		{
 			temp = queue->requests[i];
 			queue->requests[i] = queue->requests[the_winner];
@@ -73,8 +73,8 @@ static void	reorder_queue(t_queue *queue, int i, char *scheduler)
 			&& goes_first(queue->requests[right_child],
 				queue->requests[left_child], scheduler))
 			the_winner = right_child;
-		if (!goes_first(queue->requests[the_winner],
-				queue->requests[i], scheduler))
+		if (!goes_first(queue->requests[the_winner], queue->requests[i],
+				scheduler))
 			break ;
 		temp = queue->requests[i];
 		queue->requests[i] = queue->requests[the_winner];

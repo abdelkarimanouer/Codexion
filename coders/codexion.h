@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/20 05:48:01 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/20 06:26:36 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,23 @@ typedef struct s_request
 	unsigned long		coder_id;
 	unsigned long long	ticket_number;
 	unsigned long long	deadline;
-}			t_request;
+}						t_request;
 
 typedef struct s_queue
 {
 	struct s_request	*requests;
 	long				number_of_tickets;
 	long				max_nums_of_tickets;
-}			t_queue;
+}						t_queue;
 
 typedef struct s_dongle
 {
-	pthread_mutex_t	lock_dongle;
-	pthread_cond_t	condition;
-	int				is_available;
-	unsigned long	cooldown_end;
-	struct s_queue	*queue;
-}			t_dongle;
+	pthread_mutex_t		lock_dongle;
+	pthread_cond_t		condition;
+	int					is_available;
+	unsigned long		cooldown_end;
+	struct s_queue		*queue;
+}						t_dongle;
 
 typedef struct s_coder
 {
@@ -47,17 +47,17 @@ typedef struct s_coder
 	pthread_mutex_t		lock_l_c_s;
 	struct s_dongle		*left_dongle;
 	struct s_dongle		*right_dongle;
-}			t_coder;
+}						t_coder;
 
 typedef struct s_simulation
 {
-	unsigned long	number_of_coders;
-	unsigned long	time_to_burnout;
-	unsigned long	time_to_compile;
-	unsigned long	time_to_debug;
-	unsigned long	time_to_refactor;
-	unsigned long	number_of_compiles_required;
-	unsigned long	dongle_cooldown;
+	unsigned long		number_of_coders;
+	unsigned long		time_to_burnout;
+	unsigned long		time_to_compile;
+	unsigned long		time_to_debug;
+	unsigned long		time_to_refactor;
+	unsigned long		number_of_compiles_required;
+	unsigned long		dongle_cooldown;
 	unsigned long long	start_timestamp;
 	struct s_coder		*coders;
 	struct s_dongle		*dongles;
@@ -68,10 +68,10 @@ typedef struct s_simulation
 	pthread_mutex_t		print_mutex;
 	unsigned long long	ticket_count;
 	pthread_mutex_t		ticket_count_mutex;
-	char			*scheduler;
-}			t_simulation;
+	char				*scheduler;
+}						t_simulation;
 
-int			parsing_args(t_simulation **sim, char **v);
+int			parsing_args(t_simulation *sim, char **v);
 void		init_simulation_with_default_values(t_simulation **sim);
 void		push_request(t_queue *queue, t_request new_request,
 				char *scheduler);
@@ -80,6 +80,9 @@ t_request	*get_the_winner(t_queue *queue);
 int			is_queue_empty(t_queue *queue);
 int			init_dongles_and_coders(t_simulation **sim);
 void		free_queues(t_dongle **dongles, int i);
-int			init_queue_of_dongles(t_dongle **dongles, int number_of_coders);
+int			init_queue_of_dongles(t_dongle **dongles,
+				int number_of_coders);
+void		init_mutexes_and_dongles(t_simulation *sim);
+void		init_coders(t_simulation *sim);
 
 #endif
