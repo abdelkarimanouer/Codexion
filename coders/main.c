@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/20 05:42:24 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/20 06:02:12 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static void	free_clean_everything(t_simulation **sim)
 {
 	if (!sim || !*sim)
 		return ;
+	free((*sim)->coders);
+	free((*sim)->dongles);
 	free(*sim);
 	*sim = NULL;
 }
