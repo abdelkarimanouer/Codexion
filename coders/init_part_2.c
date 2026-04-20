@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 06:23:59 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/20 08:19:48 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/20 10:05:27 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	init_coders(t_simulation *sim)
 		sim->coders[i].left_dongle = &sim->dongles[i];
 		sim->coders[i].right_dongle = (&sim->dongles[(i + 1)
 				% sim->number_of_coders]);
+		sim->coders[i].sim = sim;
 		i++;
 	}
 }
