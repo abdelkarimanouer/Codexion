@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/20 05:27:48 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/20 05:40:47 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,7 @@ void		pop_request(t_queue *queue, char *scheduler);
 t_request	*get_the_winner(t_queue *queue);
 int			is_queue_empty(t_queue *queue);
 int			init_dongles_and_coders(t_simulation **sim);
+void		free_queues(t_dongle **dongles, int i);
+int			init_queue_of_dongles(t_dongle **dongles, int number_of_coders);
 
 #endif
