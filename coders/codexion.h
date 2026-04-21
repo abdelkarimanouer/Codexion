@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/21 09:26:27 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/21 09:43:23 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,9 @@ unsigned long long	get_current_time(void);
 void				print_action(t_simulation *sim, int id, char *action);
 void				take_dongle(t_coder *coder, t_dongle *dongle);
 void				*coder_routine(void *arg);
+void				my_sleep(unsigned long long time_in_ms, t_simulation *sim);
+void				release_dongle(t_coder *coder, t_dongle *dongle);
+int					check_simulation_stop(t_simulation *sim);
+void				my_sleep(unsigned long long time_in_ms, t_simulation *sim);
 
 #endif
