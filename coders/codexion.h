@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/20 15:25:33 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/21 09:25:54 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ void				init_mutexes_and_dongles(t_simulation *sim);
 void				init_coders(t_simulation *sim);
 unsigned long long	get_current_time(void);
 void				print_action(t_simulation *sim, int id, char *action);
+void	take_dongle(t_coder *coder, t_dongle *dongle);
 
 #endif
