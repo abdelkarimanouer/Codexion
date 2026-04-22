@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/22 13:49:24 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/22 14:00:04 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,11 @@ int	main(int argc, char **argv)
 	init_simulation_with_default_values(&sim);
 	if (start(&sim, argv))
 		return (fprintf(stderr, "[ERROR]: bad_args or mem_alloc_fail\n"), 1);
-	start_threads(sim);
+	if (start_threads(sim))
+	{
+		free_clean_everything(&sim);
+		return (1);
+	}
     join_threads(sim);
 	return (free_clean_everything(&sim), 0);
 }
