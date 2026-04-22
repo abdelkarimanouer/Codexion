@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 09:21:58 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/22 13:59:24 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/22 14:05:45 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,16 @@ void	*coder_routine(void *arg)
 	{
 		if (check_simulation_stop(coder->sim))
 			break ;
-		take_dongle(coder, coder->left_dongle);
-		take_dongle(coder, coder->right_dongle);
+		if (coder->id % 2 == 0)
+		{
+			take_dongle(coder, coder->left_dongle);
+			take_dongle(coder, coder->right_dongle);
+		}
+		else
+		{
+			take_dongle(coder, coder->right_dongle);
+			take_dongle(coder, coder->left_dongle);
+		}
 		pthread_mutex_lock(&coder->lock_l_c_s);
 		coder->last_compile_start = get_current_time();
 		pthread_mutex_unlock(&coder->lock_l_c_s);

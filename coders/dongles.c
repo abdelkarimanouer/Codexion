@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:12:17 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/21 09:29:56 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/22 14:10:00 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ void	take_dongle(t_coder *coder, t_dongle *dongle)
 	pthread_mutex_lock(&dongle->lock_dongle);
 	push_request(dongle->queue, req, coder->sim->scheduler);
 	while (dongle->is_available == 0
+		|| !get_the_winner(dongle->queue)
 		|| get_the_winner(dongle->queue)->coder_id != coder->id
-		|| get_current_time() < dongle->cooldown_end)
+		|| get_current_time() < dongle->cooldown_end
+	)
 		pthread_cond_wait(&dongle->condition, &dongle->lock_dongle);
 	dongle->is_available = 0;
 	pop_request(dongle->queue, coder->sim->scheduler);
