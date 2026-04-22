@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 09:21:58 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/22 13:24:12 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/22 13:43:13 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,36 @@ void	*monitor_routine(void *arg)
 		usleep(1000);
 	}
 	return (NULL);
+}
+
+void	start_threads(t_simulation *sim)
+{
+	unsigned long i;
+
+	for (i = 0; i < sim->number_of_coders; i++)
+	{
+		if (pthread_create(&sim->coders[i].coder_thread, NULL, coder_routine, &sim->coders[i]) != 0)
+		{
+			fprintf(stderr, "Error creating coder thread %lu\n", i);
+			exit(1);
+		}
+	}
+
+	if (pthread_create(&sim->monitor, NULL, monitor_routine, sim) != 0)
+	{
+		fprintf(stderr, "Error creating monitor thread\n");
+		exit(1);
+	}
+}
+
+void	join_threads(t_simulation *sim)
+{
+	unsigned long i;
+
+	for (i = 0; i < sim->number_of_coders; i++)
+	{
+		pthread_join(sim->coders[i].coder_thread, NULL);
+	}
+
+	pthread_join(sim->monitor, NULL);
 }
