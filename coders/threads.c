@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 09:21:58 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/22 10:22:17 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/22 13:24:12 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,34 @@ void	*coder_routine(void *arg)
 			break;
 		else
 			rest_of_code(coder);
+	}
+	return (NULL);
+}
+
+void	*monitor_routine(void *arg)
+{
+	t_simulation		*sim;
+	unsigned long		i;
+	t_coder				*coder;
+
+	sim = (t_simulation *)arg;
+	while (1)
+	{
+		i = 0;
+		while (i < sim->number_of_coders)
+		{
+			coder = &sim->coders[i];
+			if (get_current_time() - coder->last_compile_start > sim->time_to_burnout)
+			{
+				pthread_mutex_lock(&sim->stop_mutex);
+				sim->stop = 1;
+				pthread_mutex_unlock(&sim->stop_mutex);
+				print_action(sim, coder->id, "burned out");
+				return (NULL);
+			}
+			i++;
+		}
+		usleep(1000);
 	}
 	return (NULL);
 }
