@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:12:17 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/22 14:10:00 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/23 11:16:12 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,22 @@ void	take_dongle(t_coder *coder, t_dongle *dongle)
 
 void	release_dongle(t_coder *coder, t_dongle *dongle)
 {
+	long	i;
+
 	pthread_mutex_lock(&dongle->lock_dongle);
 	dongle->is_available = 1;
 	dongle->cooldown_end = get_current_time() + coder->sim->dongle_cooldown;
 	pthread_cond_broadcast(&dongle->condition);
 	pthread_mutex_unlock(&dongle->lock_dongle);
+	i = 0;
+	while (i < coder->sim->number_of_coders)
+	{
+		if (&coder->sim->dongles[i] != dongle)
+		{
+			pthread_mutex_lock(&coder->sim->dongles[i].lock_dongle);
+			pthread_cond_broadcast(&coder->sim->dongles[i].condition);
+			pthread_mutex_unlock(&coder->sim->dongles[i].lock_dongle);
+		}
+		i++;
+	}
 }
