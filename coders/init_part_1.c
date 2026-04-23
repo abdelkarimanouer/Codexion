@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 15:35:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/22 13:42:20 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/23 11:04:28 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int	init_dongles_and_coders(t_simulation **sim)
 	return (1);
 }
 
-int	init_queue_of_dongles(t_dongle **dongles, int number_of_coders)
+int	init_queue_of_dongles(t_dongle **dongles, long number_of_coders)
 {
-	int	i;
+	long	i;
 
 	i = 0;
 	while (i < number_of_coders)
@@ -64,7 +64,7 @@ int	init_queue_of_dongles(t_dongle **dongles, int number_of_coders)
 
 void	init_mutexes_and_dongles(t_simulation *sim)
 {
-	unsigned long	i;
+	long	i;
 
 	pthread_mutex_init(&sim->stop_mutex, NULL);
 	pthread_mutex_init(&sim->print_mutex, NULL);

@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 09:21:58 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/23 11:00:33 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/23 11:06:20 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	*coder_routine(void *arg)
 
 void	*monitor_routine(void *arg)
 {
-	t_simulation		*sim;
-	unsigned long		i;
-	t_coder				*coder;
+	t_simulation	*sim;
+	long			i;
+	t_coder			*coder;
 
 	sim = (t_simulation *)arg;
 	while (1)
@@ -70,14 +70,17 @@ void	*monitor_routine(void *arg)
 		while (i < sim->number_of_coders)
 		{
 			coder = &sim->coders[i];
+			pthread_mutex_lock(&coder->lock_l_c_s);
 			if (get_current_time() - coder->last_compile_start > sim->time_to_burnout)
 			{
+				pthread_mutex_unlock(&coder->lock_l_c_s);
 				pthread_mutex_lock(&sim->stop_mutex);
 				sim->stop = 1;
 				pthread_mutex_unlock(&sim->stop_mutex);
 				print_action(sim, coder->id, "burned out");
 				return (NULL);
 			}
+			pthread_mutex_unlock(&coder->lock_l_c_s);
 			i++;
 		}
 		usleep(1000);
@@ -87,9 +90,10 @@ void	*monitor_routine(void *arg)
 
 int	start_threads(t_simulation *sim)
 {
-	unsigned long i;
+	long i;
 
-	for (i = 0; i < sim->number_of_coders; i++)
+	i = 0;
+	while (i < sim->number_of_coders)
 	{
 		if (pthread_create(&sim->coders[i].coder_thread, NULL,
 			coder_routine, &sim->coders[i]) != 0)
@@ -97,6 +101,7 @@ int	start_threads(t_simulation *sim)
 			fprintf(stderr, "Error creating coder thread %lu\n", i);
 			return (1);
 		}
+		i++;
 	}
 	if (pthread_create(&sim->monitor, NULL, monitor_routine, sim) != 0)
 	{
@@ -108,9 +113,13 @@ int	start_threads(t_simulation *sim)
 
 void	join_threads(t_simulation *sim)
 {
-	unsigned long i;
+	long i;
 
-	for (i = 0; i < sim->number_of_coders; i++)
+	i = 0;
+	while (i < sim->number_of_coders)
+	{
 		pthread_join(sim->coders[i].coder_thread, NULL);
+		i++;
+	}
 	pthread_join(sim->monitor, NULL);
 }

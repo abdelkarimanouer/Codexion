@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 10:54:42 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/21 09:42:26 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/23 11:05:10 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	free_queues(t_dongle **dongles, int i)
 	}
 }
 
-unsigned long long	get_current_time(void)
+long long	get_current_time(void)
 {
 	struct timeval		tv;
 	unsigned long long	current_time;
@@ -54,9 +54,9 @@ unsigned long long	get_current_time(void)
 	return (current_time);
 }
 
-void	my_sleep(unsigned long long time_in_ms, t_simulation *sim)
+void	my_sleep(long long time_in_ms, t_simulation *sim)
 {
-	unsigned long long	start;
+	long long	start;
 
 	start = get_current_time();
 	while (get_current_time() - start < time_in_ms)
