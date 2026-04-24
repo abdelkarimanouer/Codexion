@@ -3,7 +3,7 @@ CC=cc
 CFLAGS = -Wall -Wextra -Werror -pthread
 SRC=coders/parsing.c coders/main.c coders/init_part_1.c coders/init_part_2.c\
 coders/queue.c coders/utils.c coders/threads.c coders/dongles.c coders/action.c\
-coders/free_clean.c
+coders/free_clean.c coders/coder_routine.c coders/monitor.c
 OBJ=$(SRC:%.c=%.o)
 INC=coders/codexion.h coders/headers.h
 

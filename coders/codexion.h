@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/24 10:53:21 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/24 11:14:17 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ void				my_sleep(long long time_in_ms, t_simulation *sim);
 void				release_dongle(t_coder *coder, t_dongle *dongle);
 int					check_simulation_stop(t_simulation *sim);
 void				my_sleep(long long time_in_ms, t_simulation *sim);
+void				*monitor_routine(void *arg);
+void				*coder_routine(void *arg);
 int					start_threads(t_simulation *sim);
 void				join_threads(t_simulation *sim);
 void				free_clean_everything(t_simulation **sim);

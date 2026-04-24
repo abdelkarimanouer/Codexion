@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 10:54:42 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/23 11:05:10 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/24 11:04:48 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	check_simulation_stop(t_simulation *sim)
 	pthread_mutex_lock(&sim->stop_mutex);
 	status = sim->stop;
 	pthread_mutex_unlock(&sim->stop_mutex);
-	return status;
+	return (status);
 }
 
 int	is_queue_empty(t_queue *queue)
@@ -62,7 +62,7 @@ void	my_sleep(long long time_in_ms, t_simulation *sim)
 	while (get_current_time() - start < time_in_ms)
 	{
 		if (check_simulation_stop(sim))
-			break;
+			break ;
 		else
 			usleep(500);
 	}

@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 13:50:06 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/23 11:06:59 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/24 10:58:49 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	free_dongles_and_queues(t_simulation *sim)
 {
-	long i;
+	long	i;
 
 	if (!sim->dongles)
 		return ;
@@ -35,7 +35,7 @@ static void	free_dongles_and_queues(t_simulation *sim)
 
 static void	free_coders_and_mutexes(t_simulation *sim)
 {
-	long i;
+	long	i;
 
 	if (!sim->coders)
 		return ;
@@ -48,7 +48,7 @@ static void	free_coders_and_mutexes(t_simulation *sim)
 	free(sim->coders);
 }
 
-void    free_clean_everything(t_simulation **sim)
+void	free_clean_everything(t_simulation **sim)
 {
 	if (!sim || !*sim)
 		return ;
