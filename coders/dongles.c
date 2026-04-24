@@ -6,13 +6,13 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:12:17 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/23 11:16:12 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/24 10:42:34 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	take_dongle(t_coder *coder, t_dongle *dongle)
+int	take_dongle(t_coder *coder, t_dongle *dongle)
 {
 	t_request	req;
 
@@ -28,33 +28,30 @@ void	take_dongle(t_coder *coder, t_dongle *dongle)
 	while (dongle->is_available == 0
 		|| !get_the_winner(dongle->queue)
 		|| get_the_winner(dongle->queue)->coder_id != coder->id
-		|| get_current_time() < dongle->cooldown_end
-	)
-		pthread_cond_wait(&dongle->condition, &dongle->lock_dongle);
+		|| get_current_time() < dongle->cooldown_end)
+	{
+		pthread_mutex_unlock(&dongle->lock_dongle);
+		if (check_simulation_stop(coder->sim))
+		{
+			pthread_mutex_lock(&dongle->lock_dongle);
+			pop_request(dongle->queue, coder->sim->scheduler);
+			pthread_mutex_unlock(&dongle->lock_dongle);
+			return (0);
+		}
+		usleep(500);
+		pthread_mutex_lock(&dongle->lock_dongle);
+	}
 	dongle->is_available = 0;
 	pop_request(dongle->queue, coder->sim->scheduler);
 	pthread_mutex_unlock(&dongle->lock_dongle);
 	print_action(coder->sim, coder->id, "has taken a dongle");
+	return (1);
 }
 
 void	release_dongle(t_coder *coder, t_dongle *dongle)
 {
-	long	i;
-
 	pthread_mutex_lock(&dongle->lock_dongle);
 	dongle->is_available = 1;
 	dongle->cooldown_end = get_current_time() + coder->sim->dongle_cooldown;
-	pthread_cond_broadcast(&dongle->condition);
 	pthread_mutex_unlock(&dongle->lock_dongle);
-	i = 0;
-	while (i < coder->sim->number_of_coders)
-	{
-		if (&coder->sim->dongles[i] != dongle)
-		{
-			pthread_mutex_lock(&coder->sim->dongles[i].lock_dongle);
-			pthread_cond_broadcast(&coder->sim->dongles[i].condition);
-			pthread_mutex_unlock(&coder->sim->dongles[i].lock_dongle);
-		}
-		i++;
-	}
 }

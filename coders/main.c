@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/23 10:56:28 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/24 10:35:34 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,9 @@ static int	start(t_simulation **sim, char **argv)
 	if (!parsing_args(*sim, argv))
 		return (free(*sim), 1);
 	if (!init_dongles_and_coders(sim))
-	{
-		free((*sim)->coders);
-		free((*sim)->dongles);
-		free(*sim);
-		return (1);
-	}
-	if (!init_queue_of_dongles(&(*sim)->dongles, (*sim)->number_of_coders))
+		return (free(*sim), 1);
+	if (!init_queue_of_dongles(&(*sim)->dongles,
+		(*sim)->number_of_coders))
 	{
 		free((*sim)->coders);
 		free((*sim)->dongles);

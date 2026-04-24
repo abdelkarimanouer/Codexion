@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 15:35:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/23 11:04:28 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/24 10:35:09 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	init_dongles_and_coders(t_simulation **sim)
 		return (0);
 	(*sim)->dongles = malloc(sizeof(t_dongle) * (*sim)->number_of_coders);
 	if (!(*sim)->dongles)
-		return (0);
+		return (free((*sim)->coders), (*sim)->coders = NULL, 0);
 	return (1);
 }
 
