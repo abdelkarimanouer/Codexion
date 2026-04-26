@@ -6,9 +6,11 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 09:21:58 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/26 09:01:46 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/26 09:49:37 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "codexion.h"
 
 #include "codexion.h"
 
@@ -30,6 +32,7 @@ void	join_threads(t_simulation *sim)
 
 static int	handle_coder_thread_fail(t_simulation *sim, long i)
 {
+	fprintf(stderr, "[ERROR]: Failed to create coder thread\n");
 	pthread_mutex_lock(&sim->stop_mutex);
 	sim->stop = 1;
 	pthread_mutex_unlock(&sim->stop_mutex);
