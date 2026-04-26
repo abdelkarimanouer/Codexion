@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 11:01:31 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/24 11:16:39 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/26 09:25:02 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ static int	check_coder_burnout(t_simulation *sim)
 			> sim->time_to_burnout)
 		{
 			pthread_mutex_unlock(&coder->lock_l_c_s);
+			print_action(sim, coder->id, "burned out");
 			pthread_mutex_lock(&sim->stop_mutex);
 			sim->stop = 1;
 			pthread_mutex_unlock(&sim->stop_mutex);
-			print_action(sim, coder->id, "burned out");
 			return (1);
 		}
 		pthread_mutex_unlock(&coder->lock_l_c_s);
