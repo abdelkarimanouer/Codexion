@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 07:51:36 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/20 15:24:08 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/26 10:52:44 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	valid_args(t_simulation *sim)
 {
-	if (sim->number_of_coders <= 0 || sim->time_to_burnout <= 0
-		|| sim->time_to_compile <= 0 || sim->time_to_debug < 0
+	if (sim->number_of_coders <= 0 || sim->time_to_burnout < 0
+		|| sim->time_to_compile < 0 || sim->time_to_debug < 0
 		|| sim->time_to_refactor < 0 || sim->number_of_compiles_required <= 0
 		|| sim->dongle_cooldown < 0 || (strcmp(sim->scheduler, "fifo") != 0
 			&& strcmp(sim->scheduler, "edf") != 0))
@@ -29,6 +29,8 @@ static int	is_num(char *s)
 	int	i;
 
 	i = 0;
+	if (s[i] == '\0')
+		return (0);
 	while (s[i])
 	{
 		if (s[i] < '0' || s[i] > '9')
@@ -37,6 +39,7 @@ static int	is_num(char *s)
 	}
 	return (1);
 }
+
 
 int	parsing_args(t_simulation *sim, char **v)
 {

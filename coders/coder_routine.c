@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 11:02:55 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/24 11:13:07 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/26 10:41:29 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ static int	do_compile(t_coder *coder, t_dongle *first, t_dongle *second)
 		return (0);
 	}
 	print_action(coder->sim, coder->id, "is compiling");
-	my_sleep(coder->sim->time_to_compile, coder->sim);
-	release_dongle(coder, first);
-	release_dongle(coder, second);
 	pthread_mutex_lock(&coder->lock_l_c_s);
 	coder->last_compile_start = get_current_time();
 	pthread_mutex_unlock(&coder->lock_l_c_s);
+	my_sleep(coder->sim->time_to_compile, coder->sim);
+	release_dongle(coder, first);
+	release_dongle(coder, second);
 	coder->compile_count++;
 	return (1);
 }
