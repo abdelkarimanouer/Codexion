@@ -6,13 +6,13 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 07:51:36 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/26 21:54:57 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/26 22:03:51 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static int	valid_args(t_simulation *sim)
+static int	check_args(t_simulation *sim)
 {
 	if (sim->number_of_coders <= 0 || sim->time_to_burnout < 0
 		|| sim->time_to_compile < 0 || sim->time_to_debug < 0
@@ -24,7 +24,7 @@ static int	valid_args(t_simulation *sim)
 		return (1);
 }
 
-static int	is_num(char *s)
+static int	is_valid_arg(char *s)
 {
 	int	i;
 
@@ -48,22 +48,22 @@ static int	is_num(char *s)
 
 int	parsing_args(t_simulation *sim, char **v)
 {
-	if (is_num(v[1]))
+	if (is_valid_arg(v[1]))
 		sim->number_of_coders = atoi(v[1]);
-	if (is_num(v[2]))
+	if (is_valid_arg(v[2]))
 		sim->time_to_burnout = atoi(v[2]);
-	if (is_num(v[3]))
+	if (is_valid_arg(v[3]))
 		sim->time_to_compile = atoi(v[3]);
-	if (is_num(v[4]))
+	if (is_valid_arg(v[4]))
 		sim->time_to_debug = atoi(v[4]);
-	if (is_num(v[5]))
+	if (is_valid_arg(v[5]))
 		sim->time_to_refactor = atoi(v[5]);
-	if (is_num(v[6]))
+	if (is_valid_arg(v[6]))
 		sim->number_of_compiles_required = atoi(v[6]);
-	if (is_num(v[7]))
+	if (is_valid_arg(v[7]))
 		sim->dongle_cooldown = atoi(v[7]);
 	sim->scheduler = v[8];
-	if (valid_args(sim))
+	if (check_args(sim))
 		return (1);
 	else
 		return (0);
