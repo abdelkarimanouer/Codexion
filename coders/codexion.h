@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/26 10:49:33 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/26 20:40:35 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ typedef struct s_simulation
 	pthread_t		monitor;
 	int				stop;
 	pthread_mutex_t	stop_mutex;
-	int				print;
 	pthread_mutex_t	print_mutex;
 	long long		ticket_count;
 	pthread_mutex_t	ticket_count_mutex;
