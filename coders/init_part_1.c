@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 15:35:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/24 10:35:09 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/27 15:35:59 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	init_mutexes_and_dongles(t_simulation *sim)
 	while (i < sim->number_of_coders)
 	{
 		pthread_mutex_init(&sim->dongles[i].lock_dongle, NULL);
-		pthread_cond_init(&sim->dongles[i].condition, NULL);
 		sim->dongles[i].is_available = 1;
 		sim->dongles[i].cooldown_end = 0;
 		i++;

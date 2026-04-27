@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/26 20:40:35 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/27 15:35:47 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ typedef struct s_queue
 typedef struct s_dongle
 {
 	pthread_mutex_t		lock_dongle;
-	pthread_cond_t		condition;
 	int					is_available;
 	long				cooldown_end;
 	struct s_queue		*queue;
