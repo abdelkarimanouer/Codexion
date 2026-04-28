@@ -6,11 +6,9 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 09:21:58 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/26 09:49:37 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/28 11:43:53 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "codexion.h"
 
 #include "codexion.h"
 
@@ -21,13 +19,16 @@ void	join_threads(t_simulation *sim)
 	i = 0;
 	while (i < sim->number_of_coders)
 	{
-		pthread_join(sim->coders[i].coder_thread, NULL);
+		if (pthread_join(sim->coders[i].coder_thread, NULL) != 0)
+			fprintf(stderr, "[ERROR]: Failed to join coder thread %ld\n",
+				sim->coders[i].id);
 		i++;
 	}
 	pthread_mutex_lock(&sim->stop_mutex);
 	sim->stop = 1;
 	pthread_mutex_unlock(&sim->stop_mutex);
-	pthread_join(sim->monitor, NULL);
+	if (pthread_join(sim->monitor, NULL) != 0)
+		fprintf(stderr, "[ERROR]: Failed to join monitor thread\n");
 }
 
 static int	handle_coder_thread_fail(t_simulation *sim, long i)
@@ -48,8 +49,8 @@ int	start_threads(t_simulation *sim)
 	i = 0;
 	while (i < sim->number_of_coders)
 	{
-		if (pthread_create(&sim->coders[i].coder_thread, NULL,
-				coder_routine, &sim->coders[i]) != 0)
+		if (pthread_create(&sim->coders[i].coder_thread, NULL, coder_routine,
+				&sim->coders[i]) != 0)
 			return (handle_coder_thread_fail(sim, i));
 		i++;
 	}

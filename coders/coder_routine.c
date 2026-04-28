@@ -12,8 +12,8 @@
 
 #include "codexion.h"
 
-static int	get_first_and_second_dongles(t_coder *coder,
-			t_dongle **first, t_dongle **second)
+static int	get_first_and_second_dongles(t_coder *coder, t_dongle **first,
+		t_dongle **second)
 {
 	if (coder->left_dongle < coder->right_dongle)
 	{

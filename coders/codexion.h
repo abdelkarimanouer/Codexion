@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/27 15:35:47 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/28 11:44:41 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 
 typedef struct s_request
 {
-	long		coder_id;
-	long long	ticket_number;
-	long long	deadline;
+	long				coder_id;
+	long long			ticket_number;
+	long long			deadline;
 }						t_request;
 
 typedef struct s_queue
@@ -51,50 +51,50 @@ typedef struct s_coder
 
 typedef struct s_simulation
 {
-	long			number_of_coders;
-	long			time_to_burnout;
-	long			time_to_compile;
-	long			time_to_debug;
-	long			time_to_refactor;
-	long			number_of_compiles_required;
-	long			dongle_cooldown;
-	char			*scheduler;
-	long long		start_timestamp;
-	struct s_coder	*coders;
-	struct s_dongle	*dongles;
-	pthread_t		monitor;
-	int				stop;
-	pthread_mutex_t	stop_mutex;
-	pthread_mutex_t	print_mutex;
-	long long		ticket_count;
-	pthread_mutex_t	ticket_count_mutex;
+	long				number_of_coders;
+	long				time_to_burnout;
+	long				time_to_compile;
+	long				time_to_debug;
+	long				time_to_refactor;
+	long				number_of_compiles_required;
+	long				dongle_cooldown;
+	char				*scheduler;
+	long long			start_timestamp;
+	struct s_coder		*coders;
+	struct s_dongle		*dongles;
+	pthread_t			monitor;
+	int					stop;
+	pthread_mutex_t		stop_mutex;
+	pthread_mutex_t		print_mutex;
+	long long			ticket_count;
+	pthread_mutex_t		ticket_count_mutex;
 }						t_simulation;
 
-int					parsing_args(t_simulation *sim, char **v);
-void				init_simulation_with_default_values(t_simulation **sim);
-void				push_request(t_queue *queue, t_request new_request,
-						char *scheduler);
-void				pop_request(t_queue *queue, char *scheduler);
-t_request			*get_the_winner(t_queue *queue);
-int					is_queue_empty(t_queue *queue);
-int					init_dongles_and_coders(t_simulation **sim);
-void				free_queues(t_dongle **dongles, int i);
-int					init_queue_of_dongles(t_dongle **dongles,
-						long number_of_coders);
-void				init_mutexes_and_dongles(t_simulation *sim);
-void				init_coders(t_simulation *sim);
-long long			get_current_time(void);
-void				print_action(t_simulation *sim, int id, char *action);
-int					take_dongle(t_coder *coder, t_dongle *dongle);
-void				*coder_routine(void *arg);
-void				my_sleep(long long time_in_ms, t_simulation *sim);
-void				release_dongle(t_coder *coder, t_dongle *dongle);
-int					check_simulation_stop(t_simulation *sim);
-void				my_sleep(long long time_in_ms, t_simulation *sim);
-void				*monitor_routine(void *arg);
-void				*coder_routine(void *arg);
-int					start_threads(t_simulation *sim);
-void				join_threads(t_simulation *sim);
-void				free_clean_everything(t_simulation **sim);
+int						parsing_args(t_simulation *sim, char **v);
+void					init_simulation_with_default_values(t_simulation **sim);
+void					push_request(t_queue *queue, t_request new_request,
+							char *scheduler);
+void					pop_request(t_queue *queue, char *scheduler);
+t_request				*get_the_winner(t_queue *queue);
+int						is_queue_empty(t_queue *queue);
+int						init_dongles_and_coders(t_simulation **sim);
+void					free_queues(t_dongle **dongles, int i);
+int						init_queue_of_dongles(t_dongle **dongles,
+							long number_of_coders);
+int						init_mutexes_and_dongles(t_simulation *sim);
+int						init_coders(t_simulation *sim);
+long long				get_current_time(void);
+void					print_action(t_simulation *sim, int id, char *action);
+int						take_dongle(t_coder *coder, t_dongle *dongle);
+void					*coder_routine(void *arg);
+void					my_sleep(long long time_in_ms, t_simulation *sim);
+void					release_dongle(t_coder *coder, t_dongle *dongle);
+int						check_simulation_stop(t_simulation *sim);
+void					my_sleep(long long time_in_ms, t_simulation *sim);
+void					*monitor_routine(void *arg);
+void					*coder_routine(void *arg);
+int						start_threads(t_simulation *sim);
+void					join_threads(t_simulation *sim);
+void					free_clean_everything(t_simulation **sim);
 
 #endif

@@ -14,8 +14,7 @@
 
 static int	take_dongle_wait(t_coder *coder, t_dongle *dongle)
 {
-	while (dongle->is_available == 0
-		|| is_queue_empty(dongle->queue)
+	while (dongle->is_available == 0 || is_queue_empty(dongle->queue)
 		|| get_the_winner(dongle->queue)->coder_id != coder->id
 		|| get_current_time() < dongle->cooldown_end)
 	{

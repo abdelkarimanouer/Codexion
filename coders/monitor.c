@@ -14,16 +14,16 @@
 
 static int	check_coder_burnout(t_simulation *sim)
 {
-	long		i;
-	t_coder		*coder;
+	long	i;
+	t_coder	*coder;
 
 	i = 0;
 	while (i < sim->number_of_coders)
 	{
 		coder = &sim->coders[i];
 		pthread_mutex_lock(&coder->lock_l_c_s);
-		if (get_current_time() - coder->last_compile_start
-			> sim->time_to_burnout)
+		if (get_current_time()
+			- coder->last_compile_start > sim->time_to_burnout)
 		{
 			pthread_mutex_unlock(&coder->lock_l_c_s);
 			print_action(sim, coder->id, "burned out");
