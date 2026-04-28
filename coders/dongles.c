@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:12:17 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/27 15:38:45 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/28 10:38:32 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	take_dongle_wait(t_coder *coder, t_dongle *dongle)
 {
 	while (dongle->is_available == 0
-		|| !get_the_winner(dongle->queue)
+		|| is_queue_empty(dongle->queue)
 		|| get_the_winner(dongle->queue)->coder_id != coder->id
 		|| get_current_time() < dongle->cooldown_end)
 	{
