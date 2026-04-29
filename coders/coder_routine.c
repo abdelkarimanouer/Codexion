@@ -6,13 +6,13 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 11:02:55 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/26 10:41:29 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/29 10:06:08 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static int	get_first_and_second_dongles(t_coder *coder, t_dongle **first,
+static void	get_first_and_second_dongles(t_coder *coder, t_dongle **first,
 		t_dongle **second)
 {
 	if (coder->left_dongle < coder->right_dongle)
@@ -25,7 +25,6 @@ static int	get_first_and_second_dongles(t_coder *coder, t_dongle **first,
 		*first = coder->right_dongle;
 		*second = coder->left_dongle;
 	}
-	return (1);
 }
 
 static int	do_compile(t_coder *coder, t_dongle *first, t_dongle *second)
