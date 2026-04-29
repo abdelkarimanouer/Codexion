@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 11:02:55 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/29 10:06:08 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/29 10:31:12 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	do_compile(t_coder *coder, t_dongle *first, t_dongle *second)
 	return (1);
 }
 
-static void	do_post_compile(t_coder *coder)
+static void	do_debug_refactor(t_coder *coder)
 {
 	print_action(coder->sim, coder->id, "is debugging");
 	my_sleep(coder->sim->time_to_debug, coder->sim);
@@ -78,7 +78,7 @@ void	*coder_routine(void *arg)
 		get_first_and_second_dongles(coder, &first, &second);
 		if (!do_compile(coder, first, second))
 			break ;
-		do_post_compile(coder);
+		do_debug_refactor(coder);
 		if (coder->compile_count >= coder->sim->number_of_compiles_required)
 			break ;
 	}
