@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 09:21:58 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/28 11:43:53 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/04/29 10:03:10 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,16 @@ void	join_threads(t_simulation *sim)
 	i = 0;
 	while (i < sim->number_of_coders)
 	{
-		if (pthread_join(sim->coders[i].coder_thread, NULL) != 0)
-			fprintf(stderr, "[ERROR]: Failed to join coder thread %ld\n",
-				sim->coders[i].id);
+		pthread_join(sim->coders[i].coder_thread, NULL);
 		i++;
 	}
 	pthread_mutex_lock(&sim->stop_mutex);
 	sim->stop = 1;
 	pthread_mutex_unlock(&sim->stop_mutex);
-	if (pthread_join(sim->monitor, NULL) != 0)
-		fprintf(stderr, "[ERROR]: Failed to join monitor thread\n");
+	pthread_join(sim->monitor, NULL);
 }
 
-static int	handle_coder_thread_fail(t_simulation *sim, long i)
+static void	handle_coder_thread_fail(t_simulation *sim, long i)
 {
 	fprintf(stderr, "[ERROR]: Failed to create coder thread\n");
 	pthread_mutex_lock(&sim->stop_mutex);
@@ -39,7 +36,6 @@ static int	handle_coder_thread_fail(t_simulation *sim, long i)
 	pthread_mutex_unlock(&sim->stop_mutex);
 	while (--i >= 0)
 		pthread_join(sim->coders[i].coder_thread, NULL);
-	return (1);
 }
 
 int	start_threads(t_simulation *sim)
@@ -51,7 +47,7 @@ int	start_threads(t_simulation *sim)
 	{
 		if (pthread_create(&sim->coders[i].coder_thread, NULL, coder_routine,
 				&sim->coders[i]) != 0)
-			return (handle_coder_thread_fail(sim, i));
+			return (handle_coder_thread_fail(sim, i), 1);
 		i++;
 	}
 	if (pthread_create(&sim->monitor, NULL, monitor_routine, sim) != 0)
