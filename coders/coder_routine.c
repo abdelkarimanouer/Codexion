@@ -43,7 +43,9 @@ static int	do_compile(t_coder *coder, t_dongle *first, t_dongle *second)
 	my_sleep(coder->sim->time_to_compile, coder->sim);
 	release_dongle(coder, first);
 	release_dongle(coder, second);
+	pthread_mutex_lock(&coder->lock_l_c_s);
 	coder->compile_count++;
+	pthread_mutex_unlock(&coder->lock_l_c_s);
 	return (1);
 }
 
@@ -89,8 +91,13 @@ void	*coder_routine(void *arg)
 		if (!do_compile(coder, first, second))
 			break ;
 		do_debug_refactor(coder);
+		pthread_mutex_lock(&coder->lock_l_c_s);
 		if (coder->compile_count >= coder->sim->number_of_compiles_required)
+		{
+			pthread_mutex_unlock(&coder->lock_l_c_s);
 			break ;
+		}
+		pthread_mutex_unlock(&coder->lock_l_c_s);
 	}
 	return (NULL);
 }

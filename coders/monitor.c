@@ -12,27 +12,39 @@
 
 #include "codexion.h"
 
+static int	is_coder_burned_out(t_simulation *sim, t_coder *coder)
+{
+	int	is_dead;
+
+	is_dead = 0;
+	pthread_mutex_lock(&coder->lock_l_c_s);
+	if (sim->number_of_compiles_required != -1
+		&& coder->compile_count >= sim->number_of_compiles_required)
+	{
+		pthread_mutex_unlock(&coder->lock_l_c_s);
+		return (0);
+	}
+	if (get_current_time() - coder->last_compile_start > sim->time_to_burnout)
+		is_dead = 1;
+	pthread_mutex_unlock(&coder->lock_l_c_s);
+	return (is_dead);
+}
+
 static int	check_coder_burnout(t_simulation *sim)
 {
 	long	i;
-	t_coder	*coder;
 
 	i = 0;
 	while (i < sim->number_of_coders)
 	{
-		coder = &sim->coders[i];
-		pthread_mutex_lock(&coder->lock_l_c_s);
-		if (get_current_time()
-			- coder->last_compile_start > sim->time_to_burnout)
+		if (is_coder_burned_out(sim, &sim->coders[i]))
 		{
-			pthread_mutex_unlock(&coder->lock_l_c_s);
-			print_action(sim, coder->id, "burned out");
+			print_action(sim, sim->coders[i].id, "burned out");
 			pthread_mutex_lock(&sim->stop_mutex);
 			sim->stop = 1;
 			pthread_mutex_unlock(&sim->stop_mutex);
 			return (1);
 		}
-		pthread_mutex_unlock(&coder->lock_l_c_s);
 		i++;
 	}
 	return (0);
