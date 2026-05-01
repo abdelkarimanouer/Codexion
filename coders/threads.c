@@ -84,6 +84,9 @@ int	start_threads(t_simulation *sim)
 		pthread_mutex_unlock(&sim->coders[i].lock_l_c_s);
 		i++;
 	}
+	pthread_mutex_lock(&sim->stop_mutex);
+	sim->stop = 0;
+	pthread_mutex_unlock(&sim->stop_mutex);
 	pthread_cond_broadcast(&sim->sync_cond);
 	pthread_mutex_unlock(&sim->sync_mutex);
 	return (0);
