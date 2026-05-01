@@ -30,7 +30,10 @@ void	join_threads(t_simulation *sim)
 
 static void	handle_coder_thread_fail(t_simulation *sim, long i)
 {
-	fprintf(stderr, "[ERROR]: Failed to create coder thread\n");
+	pthread_mutex_lock(&sim->sync_mutex);
+	sim->threads_ready = -1;
+	pthread_cond_broadcast(&sim->sync_cond);
+	pthread_mutex_unlock(&sim->sync_mutex);
 	pthread_mutex_lock(&sim->stop_mutex);
 	sim->stop = 1;
 	pthread_mutex_unlock(&sim->stop_mutex);
@@ -52,6 +55,10 @@ int	start_threads(t_simulation *sim)
 	}
 	if (pthread_create(&sim->monitor, NULL, monitor_routine, sim) != 0)
 	{
+		pthread_mutex_lock(&sim->sync_mutex);
+		sim->threads_ready = -1;
+		pthread_cond_broadcast(&sim->sync_cond);
+		pthread_mutex_unlock(&sim->sync_mutex);
 		pthread_mutex_lock(&sim->stop_mutex);
 		sim->stop = 1;
 		pthread_mutex_unlock(&sim->stop_mutex);
@@ -63,5 +70,13 @@ int	start_threads(t_simulation *sim)
 		}
 		return (1);
 	}
+	pthread_mutex_lock(&sim->sync_mutex);
+	sim->threads_ready = 1;
+	sim->start_timestamp = get_current_time();
+	while (get_current_time() == sim->start_timestamp)
+		usleep(50);
+	sim->start_timestamp = get_current_time();
+	pthread_cond_broadcast(&sim->sync_cond);
+	pthread_mutex_unlock(&sim->sync_mutex);
 	return (0);
 }

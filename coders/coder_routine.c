@@ -69,6 +69,20 @@ void	*coder_routine(void *arg)
 	t_dongle	*second;
 
 	coder = (t_coder *)arg;
+	pthread_mutex_lock(&coder->sim->sync_mutex);
+	while (coder->sim->threads_ready == 0)
+		pthread_cond_wait(&coder->sim->sync_cond, &coder->sim->sync_mutex);
+	if (coder->sim->threads_ready == -1)
+	{
+		pthread_mutex_unlock(&coder->sim->sync_mutex);
+		return (NULL);
+	}
+	pthread_mutex_unlock(&coder->sim->sync_mutex);
+	
+	pthread_mutex_lock(&coder->lock_l_c_s);
+	coder->last_compile_start = coder->sim->start_timestamp;
+	pthread_mutex_unlock(&coder->lock_l_c_s);
+
 	if (coder->id % 2 == 0)
 		usleep(1000);
 	while (1)

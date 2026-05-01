@@ -68,6 +68,9 @@ typedef struct s_simulation
 	pthread_mutex_t		print_mutex;
 	long long			ticket_count;
 	pthread_mutex_t		ticket_count_mutex;
+	pthread_mutex_t		sync_mutex;
+	pthread_cond_t		sync_cond;
+	int					threads_ready;
 }						t_simulation;
 
 int						parsing_args(t_simulation *sim, char **v);

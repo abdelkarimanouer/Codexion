@@ -43,6 +43,15 @@ void	*monitor_routine(void *arg)
 	t_simulation	*sim;
 
 	sim = (t_simulation *)arg;
+	pthread_mutex_lock(&sim->sync_mutex);
+	while (sim->threads_ready == 0)
+		pthread_cond_wait(&sim->sync_cond, &sim->sync_mutex);
+	if (sim->threads_ready == -1)
+	{
+		pthread_mutex_unlock(&sim->sync_mutex);
+		return (NULL);
+	}
+	pthread_mutex_unlock(&sim->sync_mutex);
 	while (1)
 	{
 		if (check_simulation_stop(sim))

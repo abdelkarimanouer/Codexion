@@ -72,7 +72,23 @@ int	init_mutexes_and_dongles(t_simulation *sim)
 		pthread_mutex_destroy(&sim->print_mutex);
 		return (0);
 	}
+	if (pthread_mutex_init(&sim->sync_mutex, NULL) != 0)
+	{
+		pthread_mutex_destroy(&sim->stop_mutex);
+		pthread_mutex_destroy(&sim->print_mutex);
+		pthread_mutex_destroy(&sim->ticket_count_mutex);
+		return (0);
+	}
+	if (pthread_cond_init(&sim->sync_cond, NULL) != 0)
+	{
+		pthread_mutex_destroy(&sim->stop_mutex);
+		pthread_mutex_destroy(&sim->print_mutex);
+		pthread_mutex_destroy(&sim->ticket_count_mutex);
+		pthread_mutex_destroy(&sim->sync_mutex);
+		return (0);
+	}
 	sim->stop = 0;
 	sim->ticket_count = 0;
+	sim->threads_ready = 0;
 	return (init_dongle_mutexes(sim));
 }
