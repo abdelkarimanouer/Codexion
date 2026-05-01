@@ -14,9 +14,9 @@
 
 void	print_action(t_simulation *sim, int id, char *action)
 {
-	int					is_stopped;
-	unsigned long long	timestamp;
-	long				x;
+	int		is_stopped;
+	long	timestamp;
+	long	x;
 
 	pthread_mutex_lock(&sim->print_mutex);
 	pthread_mutex_lock(&sim->stop_mutex);

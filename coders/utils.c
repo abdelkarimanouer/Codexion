@@ -43,20 +43,20 @@ void	free_queues(t_dongle **dongles, int i)
 	}
 }
 
-long long	get_current_time(void)
+long	get_current_time(void)
 {
-	struct timeval		tv;
-	unsigned long long	current_time;
+	struct timeval	tv;
+	long			current_time;
 
 	gettimeofday(&tv, NULL);
-	current_time = (unsigned long long)((tv.tv_sec * 1000) + (tv.tv_usec
+	current_time = (long)((tv.tv_sec * 1000) + (tv.tv_usec
 				/ 1000));
 	return (current_time);
 }
 
-void	my_sleep(long long time_in_ms, t_simulation *sim)
+void	my_sleep(long time_in_ms, t_simulation *sim)
 {
-	long long	start;
+	long	start;
 
 	start = get_current_time();
 	while (get_current_time() - start < time_in_ms)
