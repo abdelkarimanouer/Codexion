@@ -11,23 +11,36 @@
 /* ************************************************************************** */
 
 #include "codexion.h"
+#include <sys/time.h>
 
 static int	take_dongle_wait(t_coder *coder, t_dongle *dongle)
 {
+	struct timespec		ts;
+	struct timeval		tv;
+	long long			wakeup_time;
+
 	while (dongle->is_available == 0 || is_queue_empty(dongle->queue)
 		|| get_the_winner(dongle->queue)->coder_id != coder->id
 		|| get_current_time() < dongle->cooldown_end)
 	{
-		pthread_mutex_unlock(&dongle->lock_dongle);
 		if (check_simulation_stop(coder->sim))
 		{
-			pthread_mutex_lock(&dongle->lock_dongle);
 			pop_request(dongle->queue, coder->sim->scheduler);
-			pthread_mutex_unlock(&dongle->lock_dongle);
+			pthread_cond_broadcast(&dongle->cond_dongle);
 			return (0);
 		}
-		usleep(500);
-		pthread_mutex_lock(&dongle->lock_dongle);
+		gettimeofday(&tv, NULL);
+		wakeup_time = dongle->cooldown_end;
+		if (wakeup_time < get_current_time() + 1)
+			wakeup_time = get_current_time() + 1;
+		ts.tv_sec = tv.tv_sec + ((wakeup_time - get_current_time()) / 1000);
+		ts.tv_nsec = (tv.tv_usec * 1000) + (((wakeup_time - get_current_time()) % 1000) * 1000000);
+		if (ts.tv_nsec >= 1000000000L)
+		{
+			ts.tv_sec++;
+			ts.tv_nsec -= 1000000000L;
+		}
+		pthread_cond_timedwait(&dongle->cond_dongle, &dongle->lock_dongle, &ts);
 	}
 	return (1);
 }
@@ -45,8 +58,12 @@ int	take_dongle(t_coder *coder, t_dongle *dongle)
 	pthread_mutex_unlock(&coder->lock_l_c_s);
 	pthread_mutex_lock(&dongle->lock_dongle);
 	push_request(dongle->queue, req, coder->sim->scheduler);
+	pthread_cond_broadcast(&dongle->cond_dongle);
 	if (!take_dongle_wait(coder, dongle))
+	{
+		pthread_mutex_unlock(&dongle->lock_dongle);
 		return (0);
+	}
 	dongle->is_available = 0;
 	pop_request(dongle->queue, coder->sim->scheduler);
 	pthread_mutex_unlock(&dongle->lock_dongle);
@@ -59,5 +76,6 @@ void	release_dongle(t_coder *coder, t_dongle *dongle)
 	pthread_mutex_lock(&dongle->lock_dongle);
 	dongle->is_available = 1;
 	dongle->cooldown_end = get_current_time() + coder->sim->dongle_cooldown;
+	pthread_cond_broadcast(&dongle->cond_dongle);
 	pthread_mutex_unlock(&dongle->lock_dongle);
 }

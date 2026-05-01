@@ -53,6 +53,16 @@ static int	init_dongle_mutexes(t_simulation *sim)
 				pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
 			return (0);
 		}
+		if (pthread_cond_init(&sim->dongles[i].cond_dongle, NULL) != 0)
+		{
+			pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
+			while (--i >= 0)
+			{
+				pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
+				pthread_cond_destroy(&sim->dongles[i].cond_dongle);
+			}
+			return (0);
+		}
 		sim->dongles[i].is_available = 1;
 		sim->dongles[i].cooldown_end = 0;
 		i++;

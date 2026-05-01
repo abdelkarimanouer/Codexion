@@ -22,6 +22,7 @@ static void	free_dongles_and_queues(t_simulation *sim)
 	while (i < sim->number_of_coders)
 	{
 		pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
+		pthread_cond_destroy(&sim->dongles[i].cond_dongle);
 		if (sim->dongles[i].queue)
 		{
 			free(sim->dongles[i].queue->requests);

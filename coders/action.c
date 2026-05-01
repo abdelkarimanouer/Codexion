@@ -16,6 +16,7 @@ void	print_action(t_simulation *sim, int id, char *action)
 {
 	int					is_stopped;
 	unsigned long long	timestamp;
+	long				x;
 
 	pthread_mutex_lock(&sim->print_mutex);
 	pthread_mutex_lock(&sim->stop_mutex);
@@ -27,7 +28,15 @@ void	print_action(t_simulation *sim, int id, char *action)
 		return ;
 	}
 	if (action[0] == 'b')
+	{
 		sim->stop = 1;
+		x = 0;
+		while (x < sim->number_of_coders)
+		{
+			pthread_cond_broadcast(&sim->dongles[x].cond_dongle);
+			x++;
+		}
+	}
 	pthread_mutex_unlock(&sim->stop_mutex);
 	timestamp = get_current_time() - sim->start_timestamp;
 	printf("%llu %d %s\n", timestamp, id, action);
