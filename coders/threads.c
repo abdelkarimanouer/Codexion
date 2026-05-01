@@ -76,6 +76,14 @@ int	start_threads(t_simulation *sim)
 	while (get_current_time() == sim->start_timestamp)
 		usleep(50);
 	sim->start_timestamp = get_current_time();
+	i = 0;
+	while (i < sim->number_of_coders)
+	{
+		pthread_mutex_lock(&sim->coders[i].lock_l_c_s);
+		sim->coders[i].last_compile_start = sim->start_timestamp;
+		pthread_mutex_unlock(&sim->coders[i].lock_l_c_s);
+		i++;
+	}
 	pthread_cond_broadcast(&sim->sync_cond);
 	pthread_mutex_unlock(&sim->sync_mutex);
 	return (0);

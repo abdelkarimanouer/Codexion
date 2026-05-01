@@ -78,10 +78,6 @@ void	*coder_routine(void *arg)
 		return (NULL);
 	}
 	pthread_mutex_unlock(&coder->sim->sync_mutex);
-	
-	pthread_mutex_lock(&coder->lock_l_c_s);
-	coder->last_compile_start = coder->sim->start_timestamp;
-	pthread_mutex_unlock(&coder->lock_l_c_s);
 
 	if (coder->id % 2 == 0)
 		usleep(1000);
