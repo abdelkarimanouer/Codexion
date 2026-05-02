@@ -6,35 +6,31 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 06:23:59 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/28 11:54:34 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/02 09:37:00 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	init_coders(t_simulation *sim)
+static int	handle_dongle_mutex_fail(t_simulation *sim, long i)
 {
-	long	i;
+	pthread_mutex_destroy(&sim->stop_mutex);
+	pthread_mutex_destroy(&sim->print_mutex);
+	pthread_mutex_destroy(&sim->ticket_count_mutex);
+	while (--i >= 0)
+		pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
+	return (0);
+}
 
-	i = 0;
-	while (i < sim->number_of_coders)
+static int	handle_dongle_cond_fail(t_simulation *sim, long i)
+{
+	pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
+	while (--i >= 0)
 	{
-		sim->coders[i].id = i + 1;
-		sim->coders[i].compile_count = 0;
-		sim->coders[i].last_compile_start = get_current_time();
-		if (pthread_mutex_init(&sim->coders[i].lock_l_c_s, NULL) != 0)
-		{
-			while (--i >= 0)
-				pthread_mutex_destroy(&sim->coders[i].lock_l_c_s);
-			return (0);
-		}
-		sim->coders[i].left_dongle = &sim->dongles[i];
-		sim->coders[i].right_dongle = (&sim->dongles[(i + 1)
-				% sim->number_of_coders]);
-		sim->coders[i].sim = sim;
-		i++;
+		pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
+		pthread_cond_destroy(&sim->dongles[i].cond_dongle);
 	}
-	return (1);
+	return (0);
 }
 
 static int	init_dongle_mutexes(t_simulation *sim)
@@ -45,27 +41,32 @@ static int	init_dongle_mutexes(t_simulation *sim)
 	while (i < sim->number_of_coders)
 	{
 		if (pthread_mutex_init(&sim->dongles[i].lock_dongle, NULL) != 0)
-		{
-			pthread_mutex_destroy(&sim->stop_mutex);
-			pthread_mutex_destroy(&sim->print_mutex);
-			pthread_mutex_destroy(&sim->ticket_count_mutex);
-			while (--i >= 0)
-				pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
-			return (0);
-		}
+			return (handle_dongle_mutex_fail(sim, i));
 		if (pthread_cond_init(&sim->dongles[i].cond_dongle, NULL) != 0)
-		{
-			pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
-			while (--i >= 0)
-			{
-				pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
-				pthread_cond_destroy(&sim->dongles[i].cond_dongle);
-			}
-			return (0);
-		}
+			return (handle_dongle_cond_fail(sim, i));
 		sim->dongles[i].is_available = 1;
 		sim->dongles[i].cooldown_end = 0;
 		i++;
+	}
+	return (1);
+}
+
+static int	init_sync_mutexes(t_simulation *sim)
+{
+	if (pthread_mutex_init(&sim->sync_mutex, NULL) != 0)
+	{
+		pthread_mutex_destroy(&sim->stop_mutex);
+		pthread_mutex_destroy(&sim->print_mutex);
+		pthread_mutex_destroy(&sim->ticket_count_mutex);
+		return (0);
+	}
+	if (pthread_cond_init(&sim->sync_cond, NULL) != 0)
+	{
+		pthread_mutex_destroy(&sim->stop_mutex);
+		pthread_mutex_destroy(&sim->print_mutex);
+		pthread_mutex_destroy(&sim->ticket_count_mutex);
+		pthread_mutex_destroy(&sim->sync_mutex);
+		return (0);
 	}
 	return (1);
 }
@@ -82,21 +83,8 @@ int	init_mutexes_and_dongles(t_simulation *sim)
 		pthread_mutex_destroy(&sim->print_mutex);
 		return (0);
 	}
-	if (pthread_mutex_init(&sim->sync_mutex, NULL) != 0)
-	{
-		pthread_mutex_destroy(&sim->stop_mutex);
-		pthread_mutex_destroy(&sim->print_mutex);
-		pthread_mutex_destroy(&sim->ticket_count_mutex);
+	if (!init_sync_mutexes(sim))
 		return (0);
-	}
-	if (pthread_cond_init(&sim->sync_cond, NULL) != 0)
-	{
-		pthread_mutex_destroy(&sim->stop_mutex);
-		pthread_mutex_destroy(&sim->print_mutex);
-		pthread_mutex_destroy(&sim->ticket_count_mutex);
-		pthread_mutex_destroy(&sim->sync_mutex);
-		return (0);
-	}
 	sim->stop = 0;
 	sim->ticket_count = 0;
 	sim->threads_ready = 0;

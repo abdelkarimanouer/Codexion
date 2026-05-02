@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 15:35:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/28 11:54:55 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/02 09:37:09 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,31 @@ int	init_queue_of_dongles(t_dongle **dongles, long number_of_coders)
 		if (!init_queue_with_default_values(&(*dongles)[i].queue,
 			number_of_coders))
 			return (free((*dongles)[i].queue), free_queues(dongles, i), 0);
+		i++;
+	}
+	return (1);
+}
+
+int	init_coders(t_simulation *sim)
+{
+	long	i;
+
+	i = 0;
+	while (i < sim->number_of_coders)
+	{
+		sim->coders[i].id = i + 1;
+		sim->coders[i].compile_count = 0;
+		sim->coders[i].last_compile_start = get_current_time();
+		if (pthread_mutex_init(&sim->coders[i].lock_l_c_s, NULL) != 0)
+		{
+			while (--i >= 0)
+				pthread_mutex_destroy(&sim->coders[i].lock_l_c_s);
+			return (0);
+		}
+		sim->coders[i].left_dongle = &sim->dongles[i];
+		sim->coders[i].right_dongle = (&sim->dongles[(i + 1)
+				% sim->number_of_coders]);
+		sim->coders[i].sim = sim;
 		i++;
 	}
 	return (1);
