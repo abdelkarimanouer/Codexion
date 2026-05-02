@@ -111,22 +111,22 @@ With **EDF scheduling**, the coder closest to burning out always gets priority. 
  
 ### 3 — Cooldown Handling
  
-After a dongle is released, it cannot be taken again until `dongle_cooldown` milliseconds have elapsed. Each dongle tracks its `cooldown_end` timestamp. Any coder attempting to take a dongle before the cooldown expires will wait via `usleep(500)` polling and re-check all conditions every 500 microseconds.
+After a dongle is released, it cannot be taken again until `dongle_cooldown` milliseconds have elapsed. Each dongle tracks its `cooldown_end` timestamp. Any coder attempting to take a dongle before the cooldown expires will efficiently wait via `pthread_cond_timedwait`, utilizing the cooldown's expiration time so the thread wakes up exactly when necessary instead of busy polling.
  
 ### 4 — Precise Burnout Detection
  
 A dedicated **monitor thread** checks every coder's `last_compile_start` every 1ms. If the time since last compile exceeds `time_to_burnout`, it:
-1. Prints the burnout message immediately (before setting stop flag, to ensure the message is never suppressed)
-2. Sets `stop = 1`
-3. All waiting coders detect `stop = 1` on their next `usleep(500)` wake-up and exit cleanly
+1. Calls the print function which prints the burnout message immediately.
+2. The print function safely sets `stop = 1` inside its mutex and instantly wakes up all waiting coders via `pthread_cond_broadcast` on every dongle.
+3. All waiting coders detect the condition, abort their `pthread_cond_timedwait`, and exit cleanly.
 This guarantees burnout is detected and printed **within 10ms** of the actual burnout time as required by the subject.
- 
+
 ### 5 — Log Serialization
  
 All print operations are protected by a single `print_mutex`. Before printing, the thread checks the `stop` flag while holding the mutex. This ensures:
 - No two messages ever interleave on a single line
 - No message is printed after the simulation has stopped
-- The burnout message is printed before `stop` is set, so it is never blocked
+- The burnout message automatically triggers the global shutdown, broadcasting its stop condition safely.
 ---
  
 ## 🔒 Thread Synchronization Mechanisms
