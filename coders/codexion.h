@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/28 11:44:41 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/02 09:33:30 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,7 @@ void		*coder_routine(void *arg);
 int			start_threads(t_simulation *sim);
 void		join_threads(t_simulation *sim);
 void		free_clean_everything(t_simulation **sim);
+void		get_first_and_second_dongles(t_coder *coder, t_dongle **first,
+				t_dongle **second);
 
 #endif

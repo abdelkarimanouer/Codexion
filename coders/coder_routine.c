@@ -6,26 +6,11 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 11:02:55 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/29 10:31:12 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/02 09:32:45 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
-
-static void	get_first_and_second_dongles(t_coder *coder, t_dongle **first,
-		t_dongle **second)
-{
-	if (coder->left_dongle < coder->right_dongle)
-	{
-		*first = coder->left_dongle;
-		*second = coder->right_dongle;
-	}
-	else
-	{
-		*first = coder->right_dongle;
-		*second = coder->left_dongle;
-	}
-}
 
 static int	do_compile(t_coder *coder, t_dongle *first, t_dongle *second)
 {
@@ -64,6 +49,30 @@ static void	do_debug_refactor(t_coder *coder)
 	pthread_mutex_unlock(&coder->lock_l_c_s);
 }
 
+static int	wait_for_start(t_coder *coder)
+{
+	pthread_mutex_lock(&coder->sim->sync_mutex);
+	while (coder->sim->threads_ready == 0)
+		pthread_cond_wait(&coder->sim->sync_cond, &coder->sim->sync_mutex);
+	if (coder->sim->threads_ready == -1)
+	{
+		pthread_mutex_unlock(&coder->sim->sync_mutex);
+		return (0);
+	}
+	pthread_mutex_unlock(&coder->sim->sync_mutex);
+	return (1);
+}
+
+static int	has_reached_compile_limit(t_coder *coder)
+{
+	int	done;
+
+	pthread_mutex_lock(&coder->lock_l_c_s);
+	done = (coder->compile_count >= coder->sim->number_of_compiles_required);
+	pthread_mutex_unlock(&coder->lock_l_c_s);
+	return (done);
+}
+
 void	*coder_routine(void *arg)
 {
 	t_coder		*coder;
@@ -71,16 +80,8 @@ void	*coder_routine(void *arg)
 	t_dongle	*second;
 
 	coder = (t_coder *)arg;
-	pthread_mutex_lock(&coder->sim->sync_mutex);
-	while (coder->sim->threads_ready == 0)
-		pthread_cond_wait(&coder->sim->sync_cond, &coder->sim->sync_mutex);
-	if (coder->sim->threads_ready == -1)
-	{
-		pthread_mutex_unlock(&coder->sim->sync_mutex);
+	if (!wait_for_start(coder))
 		return (NULL);
-	}
-	pthread_mutex_unlock(&coder->sim->sync_mutex);
-
 	if (coder->id % 2 == 0)
 		usleep(1000);
 	while (1)
@@ -91,13 +92,8 @@ void	*coder_routine(void *arg)
 		if (!do_compile(coder, first, second))
 			break ;
 		do_debug_refactor(coder);
-		pthread_mutex_lock(&coder->lock_l_c_s);
-		if (coder->compile_count >= coder->sim->number_of_compiles_required)
-		{
-			pthread_mutex_unlock(&coder->lock_l_c_s);
+		if (has_reached_compile_limit(coder))
 			break ;
-		}
-		pthread_mutex_unlock(&coder->lock_l_c_s);
 	}
 	return (NULL);
 }
