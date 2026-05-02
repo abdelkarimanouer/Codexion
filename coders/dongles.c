@@ -6,18 +6,36 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:12:17 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/28 10:38:32 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/02 09:40:40 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
-#include <sys/time.h>
+
+static void	set_timeout_timespec(struct timespec *ts, long cooldown_end)
+{
+	struct timeval	tv;
+	long			wakeup_time;
+	long			now;
+
+	gettimeofday(&tv, NULL);
+	now = get_current_time();
+	wakeup_time = cooldown_end;
+	if (wakeup_time < now + 1)
+		wakeup_time = now + 1;
+	ts->tv_sec = tv.tv_sec + ((wakeup_time - now) / 1000);
+	ts->tv_nsec = (tv.tv_usec * 1000)
+		+ (((wakeup_time - now) % 1000) * 1000000);
+	if (ts->tv_nsec >= 1000000000L)
+	{
+		ts->tv_sec++;
+		ts->tv_nsec -= 1000000000L;
+	}
+}
 
 static int	take_dongle_wait(t_coder *coder, t_dongle *dongle)
 {
 	struct timespec	ts;
-	struct timeval	tv;
-	long			wakeup_time;
 
 	while (dongle->is_available == 0 || is_queue_empty(dongle->queue)
 		|| get_the_winner(dongle->queue)->coder_id != coder->id
@@ -29,17 +47,7 @@ static int	take_dongle_wait(t_coder *coder, t_dongle *dongle)
 			pthread_cond_broadcast(&dongle->cond_dongle);
 			return (0);
 		}
-		gettimeofday(&tv, NULL);
-		wakeup_time = dongle->cooldown_end;
-		if (wakeup_time < get_current_time() + 1)
-			wakeup_time = get_current_time() + 1;
-		ts.tv_sec = tv.tv_sec + ((wakeup_time - get_current_time()) / 1000);
-		ts.tv_nsec = (tv.tv_usec * 1000) + (((wakeup_time - get_current_time()) % 1000) * 1000000);
-		if (ts.tv_nsec >= 1000000000L)
-		{
-			ts.tv_sec++;
-			ts.tv_nsec -= 1000000000L;
-		}
+		set_timeout_timespec(&ts, dongle->cooldown_end);
 		pthread_cond_timedwait(&dongle->cond_dongle, &dongle->lock_dongle, &ts);
 	}
 	return (1);
