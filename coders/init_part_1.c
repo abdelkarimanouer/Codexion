@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 15:35:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/02 09:37:09 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/02 14:27:13 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ void	init_simulation_with_default_values(t_simulation **sim)
 	(*sim)->scheduler = "";
 }
 
-static int	init_queue_with_default_values(t_queue **queue, long n_of_coders)
+static int	init_queue_with_default_values(t_queue **queue)
 {
 	(*queue)->number_of_tickets = 0;
-	(*queue)->max_nums_of_tickets = n_of_coders;
-	(*queue)->requests = malloc(sizeof(t_request) * n_of_coders);
+	(*queue)->max_nums_of_tickets = 2;
+	(*queue)->requests = malloc(sizeof(t_request) * 2);
 	if (!(*queue)->requests)
 		return (0);
 	return (1);
@@ -54,8 +54,7 @@ int	init_queue_of_dongles(t_dongle **dongles, long number_of_coders)
 		(*dongles)[i].queue = malloc(sizeof(t_queue));
 		if (!(*dongles)[i].queue)
 			return (free_queues(dongles, i), 0);
-		if (!init_queue_with_default_values(&(*dongles)[i].queue,
-			number_of_coders))
+		if (!init_queue_with_default_values(&(*dongles)[i].queue))
 			return (free((*dongles)[i].queue), free_queues(dongles, i), 0);
 		i++;
 	}
