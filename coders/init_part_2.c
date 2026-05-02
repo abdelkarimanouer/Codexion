@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 06:23:59 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/02 09:37:00 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/02 12:11:14 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static int	handle_dongle_mutex_fail(t_simulation *sim, long i)
 {
 	pthread_mutex_destroy(&sim->stop_mutex);
-	pthread_mutex_destroy(&sim->print_mutex);
 	pthread_mutex_destroy(&sim->ticket_count_mutex);
 	while (--i >= 0)
 		pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
@@ -56,14 +55,12 @@ static int	init_sync_mutexes(t_simulation *sim)
 	if (pthread_mutex_init(&sim->sync_mutex, NULL) != 0)
 	{
 		pthread_mutex_destroy(&sim->stop_mutex);
-		pthread_mutex_destroy(&sim->print_mutex);
 		pthread_mutex_destroy(&sim->ticket_count_mutex);
 		return (0);
 	}
 	if (pthread_cond_init(&sim->sync_cond, NULL) != 0)
 	{
 		pthread_mutex_destroy(&sim->stop_mutex);
-		pthread_mutex_destroy(&sim->print_mutex);
 		pthread_mutex_destroy(&sim->ticket_count_mutex);
 		pthread_mutex_destroy(&sim->sync_mutex);
 		return (0);
@@ -75,12 +72,9 @@ int	init_mutexes_and_dongles(t_simulation *sim)
 {
 	if (pthread_mutex_init(&sim->stop_mutex, NULL) != 0)
 		return (0);
-	if (pthread_mutex_init(&sim->print_mutex, NULL) != 0)
-		return (pthread_mutex_destroy(&sim->stop_mutex), 0);
 	if (pthread_mutex_init(&sim->ticket_count_mutex, NULL) != 0)
 	{
 		pthread_mutex_destroy(&sim->stop_mutex);
-		pthread_mutex_destroy(&sim->print_mutex);
 		return (0);
 	}
 	if (!init_sync_mutexes(sim))
