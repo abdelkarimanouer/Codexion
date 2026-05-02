@@ -158,25 +158,27 @@ pthread_mutex_unlock(&sim->stop_mutex);
  
 Without the mutex, a coder could read a partial or stale value of `stop` — a classic data race.
  
-### Polling with usleep — Waiting for Dongle Availability
+### Condition Variables (pthread_cond) — Waiting for Dongle Availability
  
-Instead of `pthread_cond_wait`, this implementation uses a **polling loop with `usleep(500)`**. Every 500 microseconds, a waiting coder wakes up and re-checks all conditions together:
+This implementation uses **`pthread_cond_timedwait`** to handle complex time-based conditions efficiently without busy polling:
  
 ```c
-while (dongle->is_available == 0
-    || !get_the_winner(dongle->queue)
+while (dongle->is_available == 0 || is_queue_empty(dongle->queue)
     || get_the_winner(dongle->queue)->coder_id != coder->id
     || get_current_time() < dongle->cooldown_end)
 {
-    pthread_mutex_unlock(&dongle->lock_dongle);
     if (check_simulation_stop(coder->sim))
+    {
+        pop_request(dongle->queue, coder->sim->scheduler);
+        pthread_cond_broadcast(&dongle->cond_dongle);
         return (0);
-    usleep(500);
-    pthread_mutex_lock(&dongle->lock_dongle);
+    }
+    // Calculate ts for the next exact wakeup time...
+    pthread_cond_timedwait(&dongle->cond_dongle, &dongle->lock_dongle, &ts);
 }
 ```
  
-This approach was chosen because dongle availability depends on **multiple time-based and state-based conditions simultaneously** — `is_available`, `cooldown_end` (a time deadline), queue winner, and `stop` flag. `pthread_cond_wait` sleeps until explicitly woken by a broadcast, making it unreliable for time-dependent conditions like `cooldown_end` that have no natural broadcast trigger. The `usleep(500)` polling guarantees all conditions are re-evaluated periodically and correctly regardless of timing.
+This allows coders to sleep exactly until the dongle becomes available or its cooldown expires, and wake up immediately avoiding CPU waste. A `pthread_cond_broadcast` is triggered whenever a dongle state updates or a burnout requires an instant halt.
  
 ### Priority Queue (Heap) — Fair Arbitration
  
@@ -184,7 +186,7 @@ Each dongle maintains a **min-heap priority queue** of requests. When multiple c
  
 - **FIFO**: the coder with the lowest `ticket_number` wins (arrival order)
 - **EDF**: the coder with the earliest `deadline` wins (`last_compile_start + time_to_burnout`)
-Only the winner of the heap is allowed to take the dongle. All others keep polling via `usleep(500)`.
+Only the winner of the heap is allowed to take the dongle. All others keep waiting precisely via `pthread_cond_timedwait`.
  
 ### Monitor Thread — Burnout Detection
  
@@ -197,7 +199,7 @@ sim->stop = 1;                              // then set stop
 pthread_mutex_unlock(&sim->stop_mutex);
 ```
  
-The order matters — printing before setting `stop` ensures the burnout message is never suppressed by the stop check inside `print_action`. All waiting coders detect `stop = 1` on their next `usleep(500)` wake-up and exit cleanly.
+The order matters — printing before setting `stop` ensures the burnout message is never suppressed by the stop check inside `print_action`. `print_action` proactively fires a `pthread_cond_broadcast` when logging a burnout. All waiting coders are instantly woken up, detect `stop = 1`, and exit cleanly.
  
 ### Thread-Safe Communication Between Coders and Monitor
  
@@ -205,9 +207,9 @@ Coders and the monitor never share data directly. All communication goes through
  
 - Coders update `last_compile_start` under `lock_l_c_s`
 - Monitor reads `last_compile_start` under `lock_l_c_s`
-- Monitor sets `stop` under `stop_mutex`
+- Monitor or `print_action` sets `stop` under `stop_mutex`
 - Coders read `stop` under `stop_mutex`
-- Coders poll every 500µs and exit when `stop = 1` is detected
+- Coders wait via `pthread_cond_timedwait` and exit immediately if awoken to find `stop = 1`
 
 ---
 
