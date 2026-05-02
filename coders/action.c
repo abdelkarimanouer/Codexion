@@ -39,7 +39,7 @@ void	print_action(t_simulation *sim, int id, char *action)
 	}
 	if (action[0] == 'b')
 		handle_burnout_broadcast(sim);
-	pthread_mutex_unlock(&sim->stop_mutex);
 	timestamp = get_current_time() - sim->start_timestamp;
 	printf("%ld %d %s\n", timestamp, id, action);
+	pthread_mutex_unlock(&sim->stop_mutex);
 }
