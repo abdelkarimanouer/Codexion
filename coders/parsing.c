@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 07:51:36 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/03 15:56:37 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/03 15:57:55 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,10 @@ int	parsing_args(t_simulation *sim, char **v)
 	faild = 0;
 	if (!handle_args(sim, v, &faild))
 	{
-    	fprintf(stderr, "[ERROR]: Invalid argument.\n");
-    	fprintf(stderr, "Usage: ./codexion number_of_coders time_to_burnout "
-				"time_to_compile time_to_debug time_to_refactor "
-				"number_of_compiles_required dongle_cooldown scheduler\n");
+		fprintf(stderr, "[ERROR]: Invalid argument.\n");
+		fprintf(stderr, "Usage: ./codexion number_of_coders time_to_burnout "
+			"time_to_compile time_to_debug time_to_refactor "
+			"number_of_compiles_required dongle_cooldown scheduler\n");
 		return (0);
 	}
 	return (check_args(sim));
