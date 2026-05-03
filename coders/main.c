@@ -6,16 +6,14 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/02 14:22:02 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/03 15:52:18 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static int	start_initialize(t_simulation **sim, char **argv)
+static int	start_initialize(t_simulation **sim)
 {
-	if (!parsing_args(*sim, argv))
-		return (free(*sim), 1);
 	if (!init_dongles_and_coders(sim))
 		return (free(*sim), 1);
 	if (!init_queue_of_dongles(&(*sim)->dongles, (*sim)->number_of_coders))
@@ -44,7 +42,9 @@ int	main(int argc, char **argv)
 	if (!sim)
 		return (fprintf(stderr, "[ERROR]: Memory allocation failed"), 1);
 	init_simulation_with_default_values(&sim);
-	if (start_initialize(&sim, argv))
+	if (!parsing_args(sim, argv))
+		return (free(sim), 1);
+	if (start_initialize(&sim))
 		return (fprintf(stderr, "[ERROR]: bad_args or mem_alloc_fail\n"), 1);
 	if (start_threads(sim))
 	{
