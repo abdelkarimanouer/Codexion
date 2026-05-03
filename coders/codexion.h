@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/02 12:10:27 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/03 13:31:09 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define CODEXION_H
 
 # include "headers.h"
+
+# define INT_MAX 2147483647
+# define INT_MIN -2147483648
 
 typedef struct s_request
 {
@@ -101,5 +104,6 @@ void		join_threads(t_simulation *sim);
 void		free_clean_everything(t_simulation **sim);
 void		get_first_and_second_dongles(t_coder *coder, t_dongle **first,
 				t_dongle **second);
+int			ft_atoi(const char *str, int *failed);
 
 #endif

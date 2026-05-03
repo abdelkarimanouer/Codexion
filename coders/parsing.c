@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/31 07:51:36 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/26 22:03:51 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/03 13:30:40 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,45 +24,35 @@ static int	check_args(t_simulation *sim)
 		return (1);
 }
 
-static int	is_valid_arg(char *s)
-{
-	int	i;
-
-	i = 0;
-	if (s[i] == '\0')
-		return (0);
-	if (s[i] == '-')
-		return (0);
-	while (s[i])
-	{
-		if (s[i] < '0' || s[i] > '9')
-			return (0);
-		i++;
-	}
-	if (i > 10)
-		return (0);
-	if (i == 10 && strcmp(s, "2147483647") > 0)
-		return (0);
-	return (1);
-}
-
 int	parsing_args(t_simulation *sim, char **v)
 {
-	if (is_valid_arg(v[1]))
-		sim->number_of_coders = atoi(v[1]);
-	if (is_valid_arg(v[2]))
-		sim->time_to_burnout = atoi(v[2]);
-	if (is_valid_arg(v[3]))
-		sim->time_to_compile = atoi(v[3]);
-	if (is_valid_arg(v[4]))
-		sim->time_to_debug = atoi(v[4]);
-	if (is_valid_arg(v[5]))
-		sim->time_to_refactor = atoi(v[5]);
-	if (is_valid_arg(v[6]))
-		sim->number_of_compiles_required = atoi(v[6]);
-	if (is_valid_arg(v[7]))
-		sim->dongle_cooldown = atoi(v[7]);
+	int	faild;
+
+	faild = 0;
+	sim->number_of_coders = ft_atoi(v[1], &faild);
+	if (faild)
+		return (faild = 0, 0);
+	sim->time_to_burnout = ft_atoi(v[2], &faild);
+	if (faild)
+		return (faild = 0, 0);
+	sim->time_to_compile = ft_atoi(v[3], &faild);
+	if (faild)
+		return (faild = 0, 0);
+	sim->time_to_debug = ft_atoi(v[4], &faild);
+	if (faild)
+		return (faild = 0, 0);
+	sim->time_to_refactor = ft_atoi(v[5], &faild);
+	if (faild)
+		return (faild = 0, 0);
+	sim->number_of_compiles_required = ft_atoi(v[6], &faild);
+	if (faild)
+		return (faild = 0, 0);
+	sim->dongle_cooldown = ft_atoi(v[7], &faild);
+	if (faild)
+		return (faild = 0, 0);
 	sim->scheduler = v[8];
+	if (faild)
+		return (0);
 	if (check_args(sim))
 		return (1);
 	else
