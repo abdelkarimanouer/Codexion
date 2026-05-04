@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/04 17:19:57 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/04 17:20:17 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,3 @@ int	main(int argc, char **argv)
 	join_threads(sim);
 	return (free_clean_everything(&sim), 0);
 }
-
