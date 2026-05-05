@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 11:02:55 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/02 09:32:45 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/05 11:00:21 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	*coder_routine(void *arg)
 	if (!wait_for_start(coder))
 		return (NULL);
 	if (coder->id % 2 == 0)
-		usleep(1000);
+		my_sleep(coder->sim->time_to_compile / 2, coder->sim);
 	while (1)
 	{
 		if (check_simulation_stop(coder->sim))
