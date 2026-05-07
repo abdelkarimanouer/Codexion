@@ -81,6 +81,8 @@ void		init_simulation_with_default_values(t_simulation **sim);
 void		push_request(t_queue *queue, t_request new_request,
 				char *scheduler);
 void		pop_request(t_queue *queue, char *scheduler);
+void		bubble_up(t_queue *queue, int i, char *scheduler);
+void		bubble_down(t_queue *queue, int i, char *scheduler);
 t_request	*get_the_winner(t_queue *queue);
 int			is_queue_empty(t_queue *queue);
 int			init_dongles_and_coders(t_simulation **sim);

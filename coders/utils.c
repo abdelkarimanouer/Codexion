@@ -22,14 +22,6 @@ int	check_simulation_stop(t_simulation *sim)
 	return (status);
 }
 
-int	is_queue_empty(t_queue *queue)
-{
-	if (!queue || queue->number_of_tickets <= 0)
-		return (1);
-	else
-		return (0);
-}
-
 void	free_queues(t_dongle **dongles, int i)
 {
 	int	j;

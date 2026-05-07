@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   queue.c                                            :+:      :+:    :+:   */
+/*   min_heap_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "codexion.h"
 
-static int	goes_first(t_request a, t_request b, char *scheduler)
+int	goes_first(t_request a, t_request b, char *scheduler)
 {
 	if (strcmp(scheduler, "fifo") == 0)
 	{
@@ -32,15 +32,11 @@ static int	goes_first(t_request a, t_request b, char *scheduler)
 	return (0);
 }
 
-void	push_request(t_queue *queue, t_request new_request, char *scheduler)
+void	bubble_up(t_queue *queue, int i, char *scheduler)
 {
-	int			i;
 	int			the_winner;
 	t_request	temp;
 
-	i = queue->number_of_tickets;
-	queue->requests[i] = new_request;
-	queue->number_of_tickets++;
 	while (i > 0)
 	{
 		the_winner = (i - 1) / 2;
@@ -57,7 +53,7 @@ void	push_request(t_queue *queue, t_request new_request, char *scheduler)
 	}
 }
 
-static void	reorder_queue(t_queue *queue, int i, char *scheduler)
+void	bubble_down(t_queue *queue, int i, char *scheduler)
 {
 	int			left_child;
 	int			right_child;
@@ -83,24 +79,16 @@ static void	reorder_queue(t_queue *queue, int i, char *scheduler)
 	}
 }
 
-void	pop_request(t_queue *queue, char *scheduler)
-{
-	t_request	temp;
-	int			i;
-
-	if (queue->number_of_tickets <= 0)
-		return ;
-	queue->number_of_tickets--;
-	i = queue->number_of_tickets;
-	temp = queue->requests[i];
-	queue->requests[i] = queue->requests[0];
-	queue->requests[0] = temp;
-	reorder_queue(queue, 0, scheduler);
-}
-
 t_request	*get_the_winner(t_queue *queue)
 {
 	if (!queue || queue->number_of_tickets <= 0 || !queue->requests)
 		return (NULL);
 	return (&(queue->requests[0]));
+}
+
+int	is_queue_empty(t_queue *queue)
+{
+	if (!queue || queue->number_of_tickets <= 0)
+		return (1);
+	return (0);
 }
