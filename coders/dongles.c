@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:12:17 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/02 12:21:13 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 16:36:46 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,13 @@
 
 static void	set_timeout_timespec(struct timespec *ts, long cooldown_end)
 {
-	struct timeval	tv;
-	long			wakeup_time;
-	long			now;
+    long	now;
 
-	gettimeofday(&tv, NULL);
-	now = get_current_time();
-	wakeup_time = cooldown_end;
-	if (wakeup_time < now + 1)
-		wakeup_time = now + 1;
-	ts->tv_sec = tv.tv_sec + ((wakeup_time - now) / 1000);
-	ts->tv_nsec = (tv.tv_usec * 1000)
-		+ (((wakeup_time - now) % 1000) * 1000000);
-	if (ts->tv_nsec >= 1000000000L)
-	{
-		ts->tv_sec++;
-		ts->tv_nsec -= 1000000000L;
-	}
+    now = get_current_time();
+    if (cooldown_end < now + 1)
+        cooldown_end = now + 1;
+    ts->tv_sec = cooldown_end / 1000;
+    ts->tv_nsec = (cooldown_end % 1000) * 1000000;
 }
 
 static int	take_dongle_wait(t_coder *coder, t_dongle *dongle)
