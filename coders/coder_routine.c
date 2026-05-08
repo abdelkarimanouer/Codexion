@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 11:02:55 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/05 11:00:21 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 12:07:40 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,15 @@ static void	do_debug_refactor(t_coder *coder)
 
 static int	wait_for_start(t_coder *coder)
 {
-	pthread_mutex_lock(&coder->sim->sync_mutex);
+	pthread_mutex_lock(&coder->sim->threads_ready_mutex);
 	while (coder->sim->threads_ready == 0)
-		pthread_cond_wait(&coder->sim->sync_cond, &coder->sim->sync_mutex);
+		pthread_cond_wait(&coder->sim->threads_ready_cond, &coder->sim->threads_ready_mutex);
 	if (coder->sim->threads_ready == -1)
 	{
-		pthread_mutex_unlock(&coder->sim->sync_mutex);
+		pthread_mutex_unlock(&coder->sim->threads_ready_mutex);
 		return (0);
 	}
-	pthread_mutex_unlock(&coder->sim->sync_mutex);
+	pthread_mutex_unlock(&coder->sim->threads_ready_mutex);
 	return (1);
 }
 

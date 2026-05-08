@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 06:23:59 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/02 12:11:14 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 12:07:40 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,17 @@ static int	init_dongle_mutexes(t_simulation *sim)
 
 static int	init_sync_mutexes(t_simulation *sim)
 {
-	if (pthread_mutex_init(&sim->sync_mutex, NULL) != 0)
+	if (pthread_mutex_init(&sim->threads_ready_mutex, NULL) != 0)
 	{
 		pthread_mutex_destroy(&sim->stop_mutex);
 		pthread_mutex_destroy(&sim->ticket_count_mutex);
 		return (0);
 	}
-	if (pthread_cond_init(&sim->sync_cond, NULL) != 0)
+	if (pthread_cond_init(&sim->threads_ready_cond, NULL) != 0)
 	{
 		pthread_mutex_destroy(&sim->stop_mutex);
 		pthread_mutex_destroy(&sim->ticket_count_mutex);
-		pthread_mutex_destroy(&sim->sync_mutex);
+		pthread_mutex_destroy(&sim->threads_ready_mutex);
 		return (0);
 	}
 	return (1);

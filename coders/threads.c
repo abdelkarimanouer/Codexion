@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 09:21:58 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/02 09:38:44 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 12:07:40 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ void	join_threads(t_simulation *sim)
 
 static void	handle_coder_thread_fail(t_simulation *sim, long i)
 {
-	pthread_mutex_lock(&sim->sync_mutex);
+	pthread_mutex_lock(&sim->threads_ready_mutex);
 	sim->threads_ready = -1;
-	pthread_cond_broadcast(&sim->sync_cond);
-	pthread_mutex_unlock(&sim->sync_mutex);
+	pthread_cond_broadcast(&sim->threads_ready_cond);
+	pthread_mutex_unlock(&sim->threads_ready_mutex);
 	pthread_mutex_lock(&sim->stop_mutex);
 	sim->stop = 1;
 	pthread_mutex_unlock(&sim->stop_mutex);
@@ -45,10 +45,10 @@ static int	handle_monitor_fail(t_simulation *sim)
 {
 	long	i;
 
-	pthread_mutex_lock(&sim->sync_mutex);
+	pthread_mutex_lock(&sim->threads_ready_mutex);
 	sim->threads_ready = -1;
-	pthread_cond_broadcast(&sim->sync_cond);
-	pthread_mutex_unlock(&sim->sync_mutex);
+	pthread_cond_broadcast(&sim->threads_ready_cond);
+	pthread_mutex_unlock(&sim->threads_ready_mutex);
 	pthread_mutex_lock(&sim->stop_mutex);
 	sim->stop = 1;
 	pthread_mutex_unlock(&sim->stop_mutex);
@@ -65,7 +65,7 @@ static void	start_simulation(t_simulation *sim)
 {
 	long	i;
 
-	pthread_mutex_lock(&sim->sync_mutex);
+	pthread_mutex_lock(&sim->threads_ready_mutex);
 	sim->threads_ready = 1;
 	sim->start_timestamp = get_current_time();
 	while (get_current_time() == sim->start_timestamp)
@@ -82,8 +82,8 @@ static void	start_simulation(t_simulation *sim)
 	pthread_mutex_lock(&sim->stop_mutex);
 	sim->stop = 0;
 	pthread_mutex_unlock(&sim->stop_mutex);
-	pthread_cond_broadcast(&sim->sync_cond);
-	pthread_mutex_unlock(&sim->sync_mutex);
+	pthread_cond_broadcast(&sim->threads_ready_cond);
+	pthread_mutex_unlock(&sim->threads_ready_mutex);
 }
 
 int	start_threads(t_simulation *sim)
