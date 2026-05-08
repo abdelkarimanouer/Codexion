@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:56:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/04 17:20:55 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 11:39:42 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	start_initialize(t_simulation **sim)
 	}
 	if (!init_mutexes_and_dongles(*sim))
 		return (free_clean_everything(sim), 1);
-	if (!init_coders(*sim))
+	if (!init_coders_with_info(*sim))
 		return (free_clean_everything(sim), 1);
 	return (0);
 }

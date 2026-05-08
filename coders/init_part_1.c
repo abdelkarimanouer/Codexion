@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 15:35:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/02 14:27:13 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 11:39:42 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	init_queue_of_dongles(t_dongle **dongles, long number_of_coders)
 	return (1);
 }
 
-int	init_coders(t_simulation *sim)
+int	init_coders_with_info(t_simulation *sim)
 {
 	long	i;
 

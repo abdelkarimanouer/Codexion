@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/03 13:31:09 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 11:39:42 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void		free_queues(t_dongle **dongles, int i);
 int			init_queue_of_dongles(t_dongle **dongles,
 				long number_of_coders);
 int			init_mutexes_and_dongles(t_simulation *sim);
-int			init_coders(t_simulation *sim);
+int			init_coders_with_info(t_simulation *sim);
 long		get_current_time(void);
 void		print_action(t_simulation *sim, int id, char *action);
 int			take_dongle(t_coder *coder, t_dongle *dongle);
