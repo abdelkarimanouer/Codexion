@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 06:23:59 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/08 12:09:59 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 12:13:39 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	init_dongle_mutexes(t_simulation *sim)
 	return (1);
 }
 
-static int	init_sync_mutexes(t_simulation *sim)
+static int	init_threads_ready_mutexes(t_simulation *sim)
 {
 	if (pthread_mutex_init(&sim->threads_ready_mutex, NULL) != 0)
 	{
@@ -77,7 +77,7 @@ int	init_mutexes_and_dongles(t_simulation *sim)
 		pthread_mutex_destroy(&sim->stop_sim_mutex);
 		return (0);
 	}
-	if (!init_sync_mutexes(sim))
+	if (!init_threads_ready_mutexes(sim))
 		return (0);
 	sim->stop_sim = 0;
 	sim->ticket_count = 0;
