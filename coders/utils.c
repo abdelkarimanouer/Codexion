@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 10:54:42 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/08 11:57:01 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 12:09:59 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int	check_simulation_stop(t_simulation *sim)
 {
 	int	status;
 
-	pthread_mutex_lock(&sim->stop_mutex);
-	status = sim->stop;
-	pthread_mutex_unlock(&sim->stop_mutex);
+	pthread_mutex_lock(&sim->stop_sim_mutex);
+	status = sim->stop_sim;
+	pthread_mutex_unlock(&sim->stop_sim_mutex);
 	return (status);
 }
 

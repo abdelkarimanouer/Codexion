@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 09:21:58 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/08 12:07:40 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 12:09:59 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	join_threads(t_simulation *sim)
 		pthread_join(sim->coders[i].coder_thread, NULL);
 		i++;
 	}
-	pthread_mutex_lock(&sim->stop_mutex);
-	sim->stop = 1;
-	pthread_mutex_unlock(&sim->stop_mutex);
+	pthread_mutex_lock(&sim->stop_sim_mutex);
+	sim->stop_sim = 1;
+	pthread_mutex_unlock(&sim->stop_sim_mutex);
 	pthread_join(sim->monitor, NULL);
 }
 
@@ -34,9 +34,9 @@ static void	handle_coder_thread_fail(t_simulation *sim, long i)
 	sim->threads_ready = -1;
 	pthread_cond_broadcast(&sim->threads_ready_cond);
 	pthread_mutex_unlock(&sim->threads_ready_mutex);
-	pthread_mutex_lock(&sim->stop_mutex);
-	sim->stop = 1;
-	pthread_mutex_unlock(&sim->stop_mutex);
+	pthread_mutex_lock(&sim->stop_sim_mutex);
+	sim->stop_sim = 1;
+	pthread_mutex_unlock(&sim->stop_sim_mutex);
 	while (--i >= 0)
 		pthread_join(sim->coders[i].coder_thread, NULL);
 }
@@ -49,9 +49,9 @@ static int	handle_monitor_fail(t_simulation *sim)
 	sim->threads_ready = -1;
 	pthread_cond_broadcast(&sim->threads_ready_cond);
 	pthread_mutex_unlock(&sim->threads_ready_mutex);
-	pthread_mutex_lock(&sim->stop_mutex);
-	sim->stop = 1;
-	pthread_mutex_unlock(&sim->stop_mutex);
+	pthread_mutex_lock(&sim->stop_sim_mutex);
+	sim->stop_sim = 1;
+	pthread_mutex_unlock(&sim->stop_sim_mutex);
 	i = 0;
 	while (i < sim->number_of_coders)
 	{
@@ -79,9 +79,9 @@ static void	start_simulation(t_simulation *sim)
 		pthread_mutex_unlock(&sim->coders[i].lock_l_c_s);
 		i++;
 	}
-	pthread_mutex_lock(&sim->stop_mutex);
-	sim->stop = 0;
-	pthread_mutex_unlock(&sim->stop_mutex);
+	pthread_mutex_lock(&sim->stop_sim_mutex);
+	sim->stop_sim = 0;
+	pthread_mutex_unlock(&sim->stop_sim_mutex);
 	pthread_cond_broadcast(&sim->threads_ready_cond);
 	pthread_mutex_unlock(&sim->threads_ready_mutex);
 }

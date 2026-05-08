@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/08 12:07:40 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 12:09:59 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ typedef struct s_simulation
 	struct s_coder	*coders;
 	struct s_dongle	*dongles;
 	pthread_t		monitor;
-	int				stop;
-	pthread_mutex_t	stop_mutex;
+	int				stop_sim;
+	pthread_mutex_t	stop_sim_mutex;
 	long			ticket_count;
 	pthread_mutex_t	ticket_count_mutex;
 	pthread_mutex_t	threads_ready_mutex;

@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 06:23:59 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/08 12:07:40 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 12:09:59 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	handle_dongle_mutex_fail(t_simulation *sim, long i)
 {
-	pthread_mutex_destroy(&sim->stop_mutex);
+	pthread_mutex_destroy(&sim->stop_sim_mutex);
 	pthread_mutex_destroy(&sim->ticket_count_mutex);
 	while (--i >= 0)
 		pthread_mutex_destroy(&sim->dongles[i].lock_dongle);
@@ -54,13 +54,13 @@ static int	init_sync_mutexes(t_simulation *sim)
 {
 	if (pthread_mutex_init(&sim->threads_ready_mutex, NULL) != 0)
 	{
-		pthread_mutex_destroy(&sim->stop_mutex);
+		pthread_mutex_destroy(&sim->stop_sim_mutex);
 		pthread_mutex_destroy(&sim->ticket_count_mutex);
 		return (0);
 	}
 	if (pthread_cond_init(&sim->threads_ready_cond, NULL) != 0)
 	{
-		pthread_mutex_destroy(&sim->stop_mutex);
+		pthread_mutex_destroy(&sim->stop_sim_mutex);
 		pthread_mutex_destroy(&sim->ticket_count_mutex);
 		pthread_mutex_destroy(&sim->threads_ready_mutex);
 		return (0);
@@ -70,16 +70,16 @@ static int	init_sync_mutexes(t_simulation *sim)
 
 int	init_mutexes_and_dongles(t_simulation *sim)
 {
-	if (pthread_mutex_init(&sim->stop_mutex, NULL) != 0)
+	if (pthread_mutex_init(&sim->stop_sim_mutex, NULL) != 0)
 		return (0);
 	if (pthread_mutex_init(&sim->ticket_count_mutex, NULL) != 0)
 	{
-		pthread_mutex_destroy(&sim->stop_mutex);
+		pthread_mutex_destroy(&sim->stop_sim_mutex);
 		return (0);
 	}
 	if (!init_sync_mutexes(sim))
 		return (0);
-	sim->stop = 0;
+	sim->stop_sim = 0;
 	sim->ticket_count = 0;
 	sim->threads_ready = 0;
 	return (init_dongle_mutexes(sim));

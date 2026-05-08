@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 13:50:06 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/08 12:07:40 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 12:09:59 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	free_clean_everything(t_simulation **sim)
 {
 	if (!sim || !*sim)
 		return ;
-	pthread_mutex_destroy(&(*sim)->stop_mutex);
+	pthread_mutex_destroy(&(*sim)->stop_sim_mutex);
 	pthread_mutex_destroy(&(*sim)->ticket_count_mutex);
 	pthread_mutex_destroy(&(*sim)->threads_ready_mutex);
 	pthread_cond_destroy(&(*sim)->threads_ready_cond);
