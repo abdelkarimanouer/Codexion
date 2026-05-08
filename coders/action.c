@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 08:42:07 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/08 12:09:59 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 18:17:56 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 static void	handle_burnout_broadcast(t_simulation *sim)
 {
-	long	x;
+	long	i;
 
 	sim->stop_sim = 1;
-	x = 0;
-	while (x < sim->number_of_coders)
+	i = 0;
+	while (i < sim->number_of_coders)
 	{
-		pthread_cond_broadcast(&sim->dongles[x].cond_dongle);
-		x++;
+		pthread_cond_broadcast(&sim->dongles[i].cond_dongle);
+		i++;
 	}
 }
 
