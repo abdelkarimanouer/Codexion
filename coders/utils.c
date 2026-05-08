@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/19 10:54:42 by aanouer           #+#    #+#             */
-/*   Updated: 2026/04/24 11:04:48 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 11:57:01 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	free_queues(t_dongle **dongles, int i)
 	j = 0;
 	while (j < i)
 	{
-		free((*dongles)[j].queue->requests);
+		free((*dongles)[j].queue->request);
 		free((*dongles)[j].queue);
 		j++;
 	}

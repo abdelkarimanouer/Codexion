@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 15:35:20 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/08 11:39:42 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 11:57:01 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ static int	init_queue_with_default_values(t_queue **queue)
 {
 	(*queue)->number_of_tickets = 0;
 	(*queue)->max_nums_of_tickets = 2;
-	(*queue)->requests = malloc(sizeof(t_request) * 2);
-	if (!(*queue)->requests)
+	(*queue)->request = malloc(sizeof(t_request) * 2);
+	if (!(*queue)->request)
 		return (0);
 	return (1);
 }

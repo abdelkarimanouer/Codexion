@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 15:50:49 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/08 11:39:42 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 11:57:01 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_request
 
 typedef struct s_queue
 {
-	struct s_request	*requests;
+	struct s_request	*request;
 	long				number_of_tickets;
 	long				max_nums_of_tickets;
 }						t_queue;

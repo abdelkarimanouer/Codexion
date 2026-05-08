@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 13:50:06 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/02 12:11:29 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/08 11:57:01 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	free_dongles_and_queues(t_simulation *sim)
 		pthread_cond_destroy(&sim->dongles[i].cond_dongle);
 		if (sim->dongles[i].queue)
 		{
-			free(sim->dongles[i].queue->requests);
+			free(sim->dongles[i].queue->request);
 			free(sim->dongles[i].queue);
 		}
 		i++;
