@@ -26,11 +26,12 @@ static int	do_compile(t_coder *coder, t_dongle *first, t_dongle *second)
 	coder->last_compile_start = get_current_time();
 	pthread_mutex_unlock(&coder->lock_l_c_s);
 	my_sleep(coder->sim->time_to_compile, coder->sim);
-	release_dongle(coder, first);
-	release_dongle(coder, second);
 	pthread_mutex_lock(&coder->lock_l_c_s);
 	coder->compile_count++;
+	coder->last_compile_start = get_current_time();
 	pthread_mutex_unlock(&coder->lock_l_c_s);
+	release_dongle(coder, first);
+	release_dongle(coder, second);
 	return (1);
 }
 
@@ -44,9 +45,6 @@ static void	do_debug_refactor(t_coder *coder)
 	my_sleep(coder->sim->time_to_refactor, coder->sim);
 	if (check_simulation_stop(coder->sim))
 		return ;
-	pthread_mutex_lock(&coder->lock_l_c_s);
-	coder->last_compile_start = get_current_time();
-	pthread_mutex_unlock(&coder->lock_l_c_s);
 }
 
 static int	wait_for_start(t_coder *coder)
