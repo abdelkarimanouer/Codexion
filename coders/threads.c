@@ -6,7 +6,7 @@
 /*   By: aanouer <aanouer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 09:21:58 by aanouer           #+#    #+#             */
-/*   Updated: 2026/05/08 18:31:14 by aanouer          ###   ########.fr       */
+/*   Updated: 2026/05/09 21:11:24 by aanouer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,6 @@ static void	start_simulation(t_simulation *sim)
 
 	pthread_mutex_lock(&sim->threads_ready_mutex);
 	sim->threads_ready = 1;
-	sim->start_timestamp = get_current_time();
-	while (get_current_time() == sim->start_timestamp)
-		usleep(50);
 	sim->start_timestamp = get_current_time();
 	i = 0;
 	while (i < sim->number_of_coders)
