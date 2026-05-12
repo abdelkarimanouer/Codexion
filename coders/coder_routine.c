@@ -51,7 +51,8 @@ static int	wait_for_start(t_coder *coder)
 {
 	pthread_mutex_lock(&coder->sim->threads_ready_mutex);
 	while (coder->sim->threads_ready == 0)
-		pthread_cond_wait(&coder->sim->threads_ready_cond, &coder->sim->threads_ready_mutex);
+		pthread_cond_wait(&coder->sim->threads_ready_cond,
+			&coder->sim->threads_ready_mutex);
 	if (coder->sim->threads_ready == -1)
 	{
 		pthread_mutex_unlock(&coder->sim->threads_ready_mutex);

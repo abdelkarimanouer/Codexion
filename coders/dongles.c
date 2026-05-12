@@ -14,13 +14,13 @@
 
 static void	set_timeout_timespec(struct timespec *ts, long cooldown_end)
 {
-    long	now;
+	long	now;
 
-    now = get_current_time();
-    if (cooldown_end < now + 1)
-        cooldown_end = now + 1;
-    ts->tv_sec = cooldown_end / 1000;
-    ts->tv_nsec = (cooldown_end % 1000) * 1000000;
+	now = get_current_time();
+	if (cooldown_end < now + 1)
+		cooldown_end = now + 1;
+	ts->tv_sec = cooldown_end / 1000;
+	ts->tv_nsec = (cooldown_end % 1000) * 1000000;
 }
 
 static int	take_dongle_wait(t_coder *coder, t_dongle *dongle)
