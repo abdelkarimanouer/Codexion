@@ -12,7 +12,7 @@
 
 #include "codexion.h"
 
-int	goes_first(t_request a, t_request b, char *scheduler)
+static int	goes_first(t_request a, t_request b, char *scheduler)
 {
 	if (strcmp(scheduler, "fifo") == 0)
 	{
