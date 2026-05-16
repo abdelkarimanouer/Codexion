@@ -39,7 +39,6 @@ void	bubble_up(t_queue *queue, int i, char *scheduler)
 
 	while (i > 0)
 	{
-		printf("\nthis is up\n\n");
 		the_winner = (i - 1) / 2;
 		if (goes_first(queue->request[i], queue->request[the_winner],
 				scheduler))
@@ -63,7 +62,6 @@ void	bubble_down(t_queue *queue, int i, char *scheduler)
 
 	while ((2 * i) + 1 < queue->number_of_tickets)
 	{
-		printf("\nthis is down\n\n");
 		left_child = (2 * i) + 1;
 		right_child = (2 * i) + 2;
 		the_winner = left_child;
